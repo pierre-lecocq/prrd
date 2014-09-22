@@ -1,7 +1,7 @@
 # File: graph.rb
-# Time-stamp: <2014-09-22 17:26:39 pierre>
+# Time-stamp: <2014-09-22 17:35:26 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Grapg class for PRRD
+# Description: Graph class for PRRD
 
 module PRRD
   class Graph

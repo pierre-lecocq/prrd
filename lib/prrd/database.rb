@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-22 17:24:18 pierre>
+# Time-stamp: <2014-09-22 17:40:16 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -23,12 +23,16 @@ module PRRD
       @archives << archive
     end
 
+    def exists?
+      File.exists? @path
+    end
+
     def create
-      p "Create database #{@path}"
+      p "Create database #{@path} with #{PRRD.bin}"
     end
 
     def update
-      p "Update database #{@path}"
+      p "Update database #{@path} with #{PRRD.bin}"
     end
 
   end

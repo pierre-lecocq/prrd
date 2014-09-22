@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-22 20:50:47 pierre>
+# Time-stamp: <2014-09-22 22:23:50 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -21,7 +21,7 @@ module PRRD
 
     # Does database file exist?
     def exists?
-      File.exists? @path
+      File.exist? @path
     end
 
     # Check database existence
@@ -29,13 +29,13 @@ module PRRD
       fail 'Database path is missing' if  @path.nil? || !exists?
     end
 
-    # Add a datasource
+    # Add a datasource object
     # @param datasource [PRRD::Database::Datasource]
     def add_datasource(datasource)
       @datasources << datasource
     end
 
-    # Add an archive
+    # Add an archive object
     # @param archive [PRRD::Database::Archive]
     def add_archive(archive)
       @archives << archive
@@ -50,16 +50,16 @@ module PRRD
       cmd << "#{PRRD.bin} create #{@path}"
       cmd << "--start #{@start} --step #{@step}"
 
-      fail 'Need datasources' if @datasources.empty?
+      fail 'Datasources are missing' if @datasources.empty?
       @datasources.map { |e| cmd << e.to_s }
 
-      fail 'Need archives' if @archives.empty?
+      fail 'Archives are missing' if @archives.empty?
       @archives.map { |e| cmd << e.to_s }
 
       # Execute
       cmd = cmd.join ' '
       `#{cmd}`
-      'Database created successfully' if $?.exitstatus == 0
+      'Database created successfully' if $CHILD_STATUS.nil?
     end
 
     # Update a database
@@ -74,7 +74,7 @@ module PRRD
 
       # Execute
       `#{cmd}`
-      'Database updated successfully' if $?.exitstatus == 0
+      'Database updated successfully' if $CHILD_STATUS.nil?
     end
   end
 end

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 20:53:56 pierre>
+# Time-stamp: <2014-09-22 22:25:05 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Test file for PRRD library
 
@@ -10,17 +10,17 @@ require_relative 'lib/prrd'
 ############################################
 # Database
 
-db = PRRD::Database.new
-db.path = File.expand_path './dummy.rrd'
+database = PRRD::Database.new
+database.path = File.expand_path './dummy.rrd'
 
 # Create database if needed
 
-unless db.exists?
+unless database.exists?
 
   # Set infos
 
-  db.start = Time.now.to_i - 86_400
-  db.step = 300
+  database.start = Time.now.to_i - 86_400
+  database.step = 300
 
   # Set datasources
 
@@ -30,7 +30,7 @@ unless db.exists?
   ds.heartbeat = 600
   ds.min = 0
   ds.max = 'U'
-  db.add_datasource ds
+  database.add_datasource ds
 
   ds = PRRD::Database::Datasource.new
   ds.name = 'ds2'
@@ -38,7 +38,7 @@ unless db.exists?
   ds.heartbeat = 600
   ds.min = 0
   ds.max = 'U'
-  db.add_datasource ds
+  database.add_datasource ds
 
   # Set archives
 
@@ -47,36 +47,36 @@ unless db.exists?
   ar.xff = 0.5
   ar.steps = 1
   ar.rows = 288
-  db.add_archive ar
+  database.add_archive ar
 
   ar = PRRD::Database::Archive.new
   ar.cf = 'AVERAGE'
   ar.xff = 0.5
   ar.steps = 3
   ar.rows = 672
-  db.add_archive ar
+  database.add_archive ar
 
   ar = PRRD::Database::Archive.new
   ar.cf = 'AVERAGE'
   ar.xff = 0.5
   ar.steps = 12
   ar.rows = 774
-  db.add_archive ar
+  database.add_archive ar
 
   # Create
 
-  puts db.create
+  puts database.create
 
 end
 
 # Update database with fake data
 
-timestamp = db.start + 1
+timestamp = database.start + 1
 while timestamp < Time.now.to_i
   value1 = 30 + Random.rand(70)
   value2 = Random.rand(40)
 
-  puts db.update(timestamp, value1, value2)
+  puts database.update(timestamp, value1, value2)
 
   timestamp += 300
 end
@@ -84,16 +84,48 @@ end
 ############################################
 # Graph
 
-graph = PRRD::Graph.new db.path
+graph = PRRD::Graph.new
 graph.path = File.expand_path './dummy.png'
+graph.database = database
+
+# Set infos
+
+graph.title = 'Dummy graph'
+graph.vertical_label = '%'
+graph.lower_limit = 0
+graph.upper_limit = 100
+graph.rigid = true
 
 # Set definitions
+
 definition = PRRD::Graph::Definition.new
+definition.vname = 'ds1'
+definition.rrdfile = database.path
+definition.ds_name = 'ds1'
+definition.cf = 'AVERAGE'
+graph.add_definition definition
+
+definition = PRRD::Graph::Definition.new
+definition.vname = 'ds2'
+definition.rrdfile = database.path
+definition.ds_name = 'ds2'
+definition.cf = 'AVERAGE'
 graph.add_definition definition
 
 # Set areas
+
 area = PRRD::Graph::Area.new
+area.value = "ds1"
+area.color = PRRD.color(:green)
+area.legend = "Dataset 1"
+graph.add_area area
+
+area = PRRD::Graph::Area.new
+area.value = "ds2"
+area.color = PRRD.color(:red)
+area.legend = "Dataset 2"
 graph.add_area area
 
 # Create graph
-graph.generate
+
+puts graph.generate

@@ -12,7 +12,7 @@ Hold on please, work in progress ...
 
 To generate a dummy example, simply run
 
-    rm graph.*.png data.*.rrd; ruby test.rb
+    rm dummy.*; ruby test.rb
 
 ### Sample real-world examples
 

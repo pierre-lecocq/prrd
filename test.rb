@@ -1,69 +1,48 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 15:11:28 pierre>
+# Time-stamp: <2014-09-22 17:25:39 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Test file for PRRD class
+# Description: Test file for PRRD library
 
 require_relative 'lib/prrd'
 
-# Setup a new prrd object
-prrd = PRRD.new 'sample'
+############################################
+# Database
 
-prrd.database_path = File.expand_path('~/work/prrd')
-prrd.image_path = File.expand_path('~/work/prrd')
+db = PRRD::Database.new
+db.path = File.expand_path './dummy.rrd'
 
-# ################
-# Create database
+# Create database if needed
+unless File.exists? db.path
+  # Set datasources
+  datasource = PRRD::Database::Datasource.new
+  db.add_datasource datasource
 
-prrd.start = (Time.now.to_i - 86_401)
-prrd.step = 300
+  # Set archives
+  archive = PRRD::Database::Archive.new
+  db.add_archive archive
 
-prrd.add_datasource name: 'ds1', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-prrd.add_datasource name: 'ds2', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 1, rows: 288
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 3, rows: 672
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 12, rows: 774
-
-puts prrd.create
-
-# ####################################################
-# Update database with fake data
-
-timestamp = Time.now.to_i
-
-ts = prrd.start + 1
-while ts < timestamp
-  value1 = 30 + Random.rand(70)
-  value2 = Random.rand(40)
-
-  puts prrd.update(ts, value1, value2)
-
-  ts += 300
+  # Create
+  db.create
 end
 
-# #########################
-# Generate the final graph
+# Update database with fake data
+db.update
 
-prrd.add_definition vname: 'ds1', ds_name: 'ds1', cf: 'AVERAGE'
-prrd.add_definition vname: 'ds2', ds_name: 'ds2', cf: 'AVERAGE'
+############################################
+# Graph
 
-# FIXME: if there is a space in the legend, we are fucked (because of _flatten)
-prrd.add_area value: 'ds1#00FF00', legend: 'DS1'
-prrd.add_area value: 'ds2#FF0000', legend: 'DS2'
+graph = PRRD::Graph.new
+graph.path = File.expand_path './dummy.png'
 
-options = {
-  title: 'My sample graph',
-  width: 600,
-  height: 300,
-  lower_limit: 0,
-  upper_limit: 100,
-  vertical_label: '%',
-  color: [
-    'GRID#aaaaaa',
-    'MGRID#aaaaaa',
-  ],
-}
+# Set definitions
+definition = PRRD::Graph::Definition.new
+graph.add_definition definition
 
-puts prrd.graph(options)
+# Set areas
+area = PRRD::Graph::Area.new
+graph.add_area area
+
+# Create graph
+graph.generate

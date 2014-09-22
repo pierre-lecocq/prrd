@@ -1,17 +1,25 @@
 # File: datasource.rb
-# Time-stamp: <2014-09-22 17:52:58 pierre>
+# Time-stamp: <2014-09-22 20:54:07 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Datasource class for PRRD
 
 module PRRD
   class Database
-    class Datasource
-      attr_accessor :data
-
+    # PRRD Database Datasource class
+    class Datasource < PRRD::Entity
+      # Constructor
       def initialize
-        @data = {}
+        super
+        @keys = [
+          :name,
+          :type,
+          :heartbeat,
+          :min,
+          :max
+        ]
       end
 
+      # Transform to a DS formatted string
       def to_s
         fail 'Empty datasource object' if @data.empty?
 

@@ -1,15 +1,17 @@
 # File: database.rb
-# Time-stamp: <2014-09-22 18:01:02 pierre>
+# Time-stamp: <2014-09-22 20:50:47 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
 module PRRD
+  # PRRD Database class
   class Database
-
+    # Accessors
     attr_accessor :path
     attr_accessor :start, :step
     attr_accessor :datasources, :archives
 
+    # Constructor
     def initialize
       @datasources = []
       @archives = []
@@ -17,22 +19,30 @@ module PRRD
       @step = 300
     end
 
-    def add_datasource(datasource)
-      @datasources << datasource
-    end
-
-    def add_archive(archive)
-      @archives << archive
-    end
-
+    # Does database file exist?
     def exists?
       File.exists? @path
     end
 
+    # Check database existence
     def check_file
-      fail 'Database is missing' if  @path.nil? || !exists?
+      fail 'Database path is missing' if  @path.nil? || !exists?
     end
 
+    # Add a datasource
+    # @param datasource [PRRD::Database::Datasource]
+    def add_datasource(datasource)
+      @datasources << datasource
+    end
+
+    # Add an archive
+    # @param archive [PRRD::Database::Archive]
+    def add_archive(archive)
+      @archives << archive
+    end
+
+    # Create a database
+    # @return [String]
     def create
       File.write @path, ''
 
@@ -46,16 +56,25 @@ module PRRD
       fail 'Need archives' if @archives.empty?
       @archives.map { |e| cmd << e.to_s }
 
-      p cmd.join ' '
+      # Execute
+      cmd = cmd.join ' '
+      `#{cmd}`
+      'Database created successfully' if $?.exitstatus == 0
     end
 
+    # Update a database
+    # @param timestamp [Integer]
+    # @param values [Array]
+    # @return [String]
     def update(timestamp = nil, *values)
       check_file
       timestamp ||= Time.now.to_i
 
       cmd = "#{PRRD.bin} update #{@path} #{timestamp}:#{values.join ':'}"
 
-      p cmd
+      # Execute
+      `#{cmd}`
+      'Database updated successfully' if $?.exitstatus == 0
     end
   end
 end

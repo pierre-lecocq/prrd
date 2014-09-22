@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-22 14:02:24 pierre>
+# Time-stamp: <2014-09-22 14:26:40 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby class
 
 class PRRD
 
   # Generic accessors
-  attr_accessor :rrdtool
+  attr_accessor :rrdtool, :name
+  attr_accessor :database_path, :image_path
   attr_accessor :database, :image
 
   # Creation process accessor
@@ -19,10 +20,11 @@ class PRRD
   attr_accessor :definitions, :areas
 
   # Initialize a PRRD object
-  def initialize
+  # @param name [String]
+  def initialize(name)
+    @name = name
     @datasources = []
     @archives = []
-
     @definitions = []
     @areas = []
 
@@ -70,13 +72,18 @@ class PRRD
 
   # Create a database
   def create
-    _validate 'start', 'step', 'database', 'datasources', 'archives'
-
+    # Paths
+    fail "#{@database_path} is not an existing directory" unless File.directory?(@database_path)
+    @database = "#{@database_path}/data.#{name}.rrd"
     unless File.exists?(@database)
       require 'fileutils'
       FileUtils.touch @database
     end
 
+    # Values
+    _validate 'start', 'step', 'database', 'datasources', 'archives'
+
+    # Command
     cmd = []
     cmd << "#{@rrdtool} create #{@database}"
     cmd << "--start #{@start} --step #{@step}"
@@ -118,8 +125,14 @@ class PRRD
   # Create a graph from the database
   # @param options [Hash]
   def graph(options)
+    # Paths
+    fail "#{@image_path} is not an existing directory" unless File.directory?(@image_path)
+    @image = "#{@image_path}/graph.#{name}.png"
+
+    # Values
     _validate 'image'
 
+    # Command
     cmd = []
 
     # Add options

@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 14:03:34 pierre>
+# Time-stamp: <2014-09-22 14:19:38 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Test file for PRRD class
 
 require_relative 'lib/prrd'
 
 # Setup a new prrd object
-prrd = PRRD.new
+prrd = PRRD.new 'sample'
 
-prrd.database = File.expand_path('~/work/rrd/sample.rrd')
-prrd.image = File.expand_path('/home/www/rrd/sample.png')
+prrd.database_path = File.expand_path('~/work/prrd')
+prrd.image_path = File.expand_path('~/work/prrd')
 
 # ################
 # Create database

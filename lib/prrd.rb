@@ -1,187 +1,119 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-22 15:10:47 pierre>
+# Time-stamp: <2014-09-22 22:17:46 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: RRD ruby class
+# Description: RRD ruby module
 
-class PRRD
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__))
 
-  # Generic accessors
-  attr_accessor :rrdtool, :name, :debug
-  attr_accessor :database_path, :image_path
-  attr_accessor :database, :image
+# Main PRRD module
+module PRRD
+  # Version
+  VERSION = [0, 2, 0].join('.')
 
-  # Creation process accessor
-  attr_accessor :start, :step
-  attr_accessor :datasources, :archives
+  # Class variables
+  @@colors = nil
+  @@bin = nil
 
-  # Graph process accessor
-  attr_accessor :definitions, :areas
-
-  # Initialize a PRRD object
-  # @param name [String]
-  def initialize(name, debug = false)
-    @name = name
-    @datasources = []
-    @archives = []
-    @definitions = []
-    @areas = []
-    @debug = debug
-
-    # rrdtool binary
-    @rrdtool = `which rrdtool`.chomp
-    if @rrdtool.empty?
-      fail 'Install "rrdtool" before. See http://oss.oetiker.ch/rrdtool/'
-    end
-  end
-
-  # Validate presence of an instance variable
-  # @param keys [Array]
-  def _validate(*keys)
-    keys.each do |key|
-      value = instance_variable_get("@#{key}")
-      fail "Set a value for \"#{key}\"" if value.nil?
-    end
-  end
-
-  private :_validate
-
-  # Flatten values
-  # @param name [String]
-  # @param data [Array]
-  def _flatten(name, data)
-    data.map { |e| "#{name}:#{e.values.join ':'}" }
-  end
-
-  private :_flatten
-
-  #######################################
-  # Create
-
-  # Add datasource for creation
-  # @param datasource [Hash]
-  def add_datasource(datasource)
-    @datasources << datasource
-  end
-
-  # Add archive for creation
-  # @param archive [Hash]
-  def add_archive(archive)
-    @archives << archive
-  end
-
-  # Create a database
-  def create
-    # Paths
-    fail "#{@database_path} is not an existing directory" unless File.directory?(@database_path)
-    @database = "#{@database_path}/data.#{name}.rrd"
-    if File.exists?(@database)
-      "Database already exists. Nothing to do."
-    else
-      File.write @database, ''
-
-      # Values
-      _validate 'start', 'step', 'database', 'datasources', 'archives'
-
-      # Command
-      cmd = []
-      cmd << "#{@rrdtool} create #{@database}"
-      cmd << "--start #{@start} --step #{@step}"
-      cmd << _flatten('DS', @datasources)
-      cmd << _flatten('RRA', @archives)
-
-      # Execute
-      cmd = cmd.join ' '
-      `#{cmd}`
-
-      p cmd if @debug
-
-      "Database created successfully" if $?.exitstatus == 0
+  # Get rrdtool binary
+  # @return [String]
+  def self.bin
+    if @@bin.nil?
+      @@bin = `which rrdtool`.chomp
+      fail 'Install rrdtool. See http://oss.oetiker.ch/rrdtool/' if @@bin.nil?
     end
 
+    @@bin
   end
 
-  #######################################
-  # Update
-
-  # Update a database
-  # @param timestamp [Integer, Nil]
-  # @param values [Array]
-  def update(timestamp = nil, *values)
-    _validate 'database'
-
-    timestamp ||= Time.now.to_i
-
-    # Execute
-    cmd = "#{rrdtool} update #{@database} #{timestamp}:#{values.join ':'}"
-    `#{cmd}`
-
-    p cmd if @debug
-
-    "Database updated successfully" if $?.exitstatus == 0
-  end
-
-  #######################################
-  # Graph
-
-  # Add definiton for graph
-  # @param definition [Hash]
-  def add_definition(definition)
-    @definitions << definition
-  end
-
-  # Add area for graph
-  # @param area [Hash]
-  def add_area(area)
-    @areas << area
-  end
-
-  # Create a graph from the database
-  # @param options [Hash]
-  def graph(options)
-    # Paths
-    fail "#{@image_path} is not an existing directory" unless File.directory?(@image_path)
-    @image = "#{@image_path}/graph.#{name}.png"
-
-    # Values
-    _validate 'image'
-
-    # Command
-    cmd = []
-
-    # Add options
-    cmd << "#{@rrdtool} graph #{@image}"
-    cmd << "--title=\"#{options[:title]}\"" if options.key?(:title)
-    cmd << "--vertical-label=\"#{options[:vertical_label]}\"" if options.key?(:vertical_label)
-    cmd << "--start=#{options[:start]}" if options.key?(:start)
-    cmd << "--end=#{options[:end]}" if options.key?(:end)
-    cmd << "--lower-limit=#{options[:lower_limit]}" if options.key?(:lower_limit)
-    cmd << "--upper-limit=#{options[:upper_limit]}" if options.key?(:upper_limit)
-    cmd << "--rigid" if options.key?(:rigid)
-    cmd << "--base=#{options[:base]}" if options.key?(:base)
-    if options.key?(:color)
-      options[:color] = [options[:color]] unless options[:color].is_a? Array
-      options[:color].map { |e| cmd << "--color #{e}" }
+  # Get colors
+  # @return [Hash]
+  def self.colors
+    if @@colors.nil?
+      @@colors = {
+        red: {
+          light: '#EA644A',
+          dark: '#CC3118'
+        },
+        orange: {
+          light: '#EC9D48',
+          dark: '#CC7016'
+        },
+        yellow: {
+          light: '#ECD748',
+          dark: '#C9B215'
+        },
+        green: {
+          light: '#54EC48',
+          dark: '#24BC14'
+        },
+        blue: {
+          light: '#48C4EC',
+          dark: '#1598C3'
+        },
+        pink: {
+          light: '#DE48EC',
+          dark: '#B415C7'
+        },
+        purple: {
+          light: '#7648EC',
+          dark: '#4D18E4'
+        }
+      }
     end
 
-    # Some adjustments
-    @definitions.map do |e|
-      if e.key?(:vname) && !e[:vname].include?(@database)
-        e[:vname] = "#{e[:vname]}=#{@database}"
+    @@colors
+  end
+
+  # Get a color
+  # @param name [Symbol, String]
+  # @return [String]
+  def self.color(name, tint = :light)
+    name = name.to_sym
+    tint = tint.to_sym
+
+    fail "Unknown color #{name}" unless self.colors.key? name
+    fail "Unknown tint #{tint}" unless self.colors[name].key? tint
+
+    self.colors[name][tint]
+  end
+
+  # Entity base class
+  class Entity
+    # Accessors
+    attr_accessor :data, :keys
+
+    # Constructor
+    def initialize
+      @data = {}
+      @keys = []
+    end
+
+    # Method missing
+    # @param m [Symbol]
+    # @param args [Array]
+    # @param block [Proc]
+    # @return [Boolean]
+    def method_missing(m, *args, &block)
+      ms = m.to_s
+      if ms.include? '='
+        ms = ms[0..-2]
+        if @keys.include? ms.to_sym
+          @data[ms.to_sym] = args[0]
+          return true
+        end
       end
+
+      super
     end
-
-    # Add data
-    cmd << _flatten('DEF', @definitions)
-    cmd << _flatten('AREA', @areas)
-
-    # Execute
-    cmd = cmd.join ' '
-    `#{cmd}`
-
-    p cmd if @debug
-
-    "Graph created successfully" if $?.exitstatus == 0
   end
 end
+
+# Requires
+require 'prrd/database'
+require 'prrd/database/datasource'
+require 'prrd/database/archive'
+require 'prrd/graph'
+require 'prrd/graph/definition'
+require 'prrd/graph/area'

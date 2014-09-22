@@ -1,69 +1,131 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 15:11:28 pierre>
+# Time-stamp: <2014-09-22 22:25:05 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Test file for PRRD class
+# Description: Test file for PRRD library
 
 require_relative 'lib/prrd'
 
-# Setup a new prrd object
-prrd = PRRD.new 'sample'
+############################################
+# Database
 
-prrd.database_path = File.expand_path('~/work/prrd')
-prrd.image_path = File.expand_path('~/work/prrd')
+database = PRRD::Database.new
+database.path = File.expand_path './dummy.rrd'
 
-# ################
-# Create database
+# Create database if needed
 
-prrd.start = (Time.now.to_i - 86_401)
-prrd.step = 300
+unless database.exists?
 
-prrd.add_datasource name: 'ds1', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-prrd.add_datasource name: 'ds2', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  # Set infos
 
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 1, rows: 288
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 3, rows: 672
-prrd.add_archive cf: 'AVERAGE', xff: 0.5, step: 12, rows: 774
+  database.start = Time.now.to_i - 86_400
+  database.step = 300
 
-puts prrd.create
+  # Set datasources
 
-# ####################################################
+  ds = PRRD::Database::Datasource.new
+  ds.name = 'ds1'
+  ds.type = 'GAUGE'
+  ds.heartbeat = 600
+  ds.min = 0
+  ds.max = 'U'
+  database.add_datasource ds
+
+  ds = PRRD::Database::Datasource.new
+  ds.name = 'ds2'
+  ds.type = 'GAUGE'
+  ds.heartbeat = 600
+  ds.min = 0
+  ds.max = 'U'
+  database.add_datasource ds
+
+  # Set archives
+
+  ar = PRRD::Database::Archive.new
+  ar.cf = 'AVERAGE'
+  ar.xff = 0.5
+  ar.steps = 1
+  ar.rows = 288
+  database.add_archive ar
+
+  ar = PRRD::Database::Archive.new
+  ar.cf = 'AVERAGE'
+  ar.xff = 0.5
+  ar.steps = 3
+  ar.rows = 672
+  database.add_archive ar
+
+  ar = PRRD::Database::Archive.new
+  ar.cf = 'AVERAGE'
+  ar.xff = 0.5
+  ar.steps = 12
+  ar.rows = 774
+  database.add_archive ar
+
+  # Create
+
+  puts database.create
+
+end
+
 # Update database with fake data
 
-timestamp = Time.now.to_i
-
-ts = prrd.start + 1
-while ts < timestamp
+timestamp = database.start + 1
+while timestamp < Time.now.to_i
   value1 = 30 + Random.rand(70)
   value2 = Random.rand(40)
 
-  puts prrd.update(ts, value1, value2)
+  puts database.update(timestamp, value1, value2)
 
-  ts += 300
+  timestamp += 300
 end
 
-# #########################
-# Generate the final graph
+############################################
+# Graph
 
-prrd.add_definition vname: 'ds1', ds_name: 'ds1', cf: 'AVERAGE'
-prrd.add_definition vname: 'ds2', ds_name: 'ds2', cf: 'AVERAGE'
+graph = PRRD::Graph.new
+graph.path = File.expand_path './dummy.png'
+graph.database = database
 
-# FIXME: if there is a space in the legend, we are fucked (because of _flatten)
-prrd.add_area value: 'ds1#00FF00', legend: 'DS1'
-prrd.add_area value: 'ds2#FF0000', legend: 'DS2'
+# Set infos
 
-options = {
-  title: 'My sample graph',
-  width: 600,
-  height: 300,
-  lower_limit: 0,
-  upper_limit: 100,
-  vertical_label: '%',
-  color: [
-    'GRID#aaaaaa',
-    'MGRID#aaaaaa',
-  ],
-}
+graph.title = 'Dummy graph'
+graph.vertical_label = '%'
+graph.lower_limit = 0
+graph.upper_limit = 100
+graph.rigid = true
 
-puts prrd.graph(options)
+# Set definitions
+
+definition = PRRD::Graph::Definition.new
+definition.vname = 'ds1'
+definition.rrdfile = database.path
+definition.ds_name = 'ds1'
+definition.cf = 'AVERAGE'
+graph.add_definition definition
+
+definition = PRRD::Graph::Definition.new
+definition.vname = 'ds2'
+definition.rrdfile = database.path
+definition.ds_name = 'ds2'
+definition.cf = 'AVERAGE'
+graph.add_definition definition
+
+# Set areas
+
+area = PRRD::Graph::Area.new
+area.value = "ds1"
+area.color = PRRD.color(:green)
+area.legend = "Dataset 1"
+graph.add_area area
+
+area = PRRD::Graph::Area.new
+area.value = "ds2"
+area.color = PRRD.color(:red)
+area.legend = "Dataset 2"
+graph.add_area area
+
+# Create graph
+
+puts graph.generate

@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-22 14:26:40 pierre>
+# Time-stamp: <2014-09-22 15:10:47 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby class
 
 class PRRD
 
   # Generic accessors
-  attr_accessor :rrdtool, :name
+  attr_accessor :rrdtool, :name, :debug
   attr_accessor :database_path, :image_path
   attr_accessor :database, :image
 
@@ -21,12 +21,13 @@ class PRRD
 
   # Initialize a PRRD object
   # @param name [String]
-  def initialize(name)
+  def initialize(name, debug = false)
     @name = name
     @datasources = []
     @archives = []
     @definitions = []
     @areas = []
+    @debug = debug
 
     # rrdtool binary
     @rrdtool = `which rrdtool`.chomp
@@ -75,22 +76,30 @@ class PRRD
     # Paths
     fail "#{@database_path} is not an existing directory" unless File.directory?(@database_path)
     @database = "#{@database_path}/data.#{name}.rrd"
-    unless File.exists?(@database)
-      require 'fileutils'
-      FileUtils.touch @database
+    if File.exists?(@database)
+      "Database already exists. Nothing to do."
+    else
+      File.write @database, ''
+
+      # Values
+      _validate 'start', 'step', 'database', 'datasources', 'archives'
+
+      # Command
+      cmd = []
+      cmd << "#{@rrdtool} create #{@database}"
+      cmd << "--start #{@start} --step #{@step}"
+      cmd << _flatten('DS', @datasources)
+      cmd << _flatten('RRA', @archives)
+
+      # Execute
+      cmd = cmd.join ' '
+      `#{cmd}`
+
+      p cmd if @debug
+
+      "Database created successfully" if $?.exitstatus == 0
     end
 
-    # Values
-    _validate 'start', 'step', 'database', 'datasources', 'archives'
-
-    # Command
-    cmd = []
-    cmd << "#{@rrdtool} create #{@database}"
-    cmd << "--start #{@start} --step #{@step}"
-    cmd << _flatten('DS', @datasources)
-    cmd << _flatten('RRA', @archives)
-
-    cmd.join ' '
   end
 
   #######################################
@@ -104,7 +113,13 @@ class PRRD
 
     timestamp ||= Time.now.to_i
 
-    "#{rrdtool} update #{@database} #{timestamp}:#{values.join ':'}"
+    # Execute
+    cmd = "#{rrdtool} update #{@database} #{timestamp}:#{values.join ':'}"
+    `#{cmd}`
+
+    p cmd if @debug
+
+    "Database updated successfully" if $?.exitstatus == 0
   end
 
   #######################################
@@ -138,7 +153,7 @@ class PRRD
     # Add options
     cmd << "#{@rrdtool} graph #{@image}"
     cmd << "--title=\"#{options[:title]}\"" if options.key?(:title)
-    cmd << "--vertival-label=\"#{options[:vertical_label]}\"" if options.key?(:vertical_label)
+    cmd << "--vertical-label=\"#{options[:vertical_label]}\"" if options.key?(:vertical_label)
     cmd << "--start=#{options[:start]}" if options.key?(:start)
     cmd << "--end=#{options[:end]}" if options.key?(:end)
     cmd << "--lower-limit=#{options[:lower_limit]}" if options.key?(:lower_limit)
@@ -161,6 +176,12 @@ class PRRD
     cmd << _flatten('DEF', @definitions)
     cmd << _flatten('AREA', @areas)
 
-    cmd.join ' '
+    # Execute
+    cmd = cmd.join ' '
+    `#{cmd}`
+
+    p cmd if @debug
+
+    "Graph created successfully" if $?.exitstatus == 0
   end
 end

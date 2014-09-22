@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-22 22:17:46 pierre>
+# Time-stamp: <2014-09-22 22:38:15 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -73,10 +73,10 @@ module PRRD
     name = name.to_sym
     tint = tint.to_sym
 
-    fail "Unknown color #{name}" unless self.colors.key? name
-    fail "Unknown tint #{tint}" unless self.colors[name].key? tint
+    fail "Unknown color #{name}" unless colors.key? name
+    fail "Unknown tint #{tint}" unless colors[name].key? tint
 
-    self.colors[name][tint]
+    colors[name][tint]
   end
 
   # Entity base class

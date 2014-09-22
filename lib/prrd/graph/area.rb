@@ -1,5 +1,5 @@
 # File: area.rb
-# Time-stamp: <2014-09-22 22:19:14 pierre>
+# Time-stamp: <2014-09-22 22:37:18 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Area class for PRRD
 
@@ -22,7 +22,7 @@ module PRRD
         fail 'Empty area object' if @data.empty?
 
         chunks = [
-          "AREA"
+          'AREA'
         ]
 
         @data.each do |k, v|

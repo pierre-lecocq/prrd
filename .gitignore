@@ -1,2 +1,6 @@
 *.rrd
 *.png
+Gemfile.lock
+.yardoc
+doc
+TAGS

@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-22 22:24:00 pierre>
+# Time-stamp: <2014-09-22 22:37:45 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -57,7 +57,7 @@ module PRRD
       cmd << "--end=#{@end}" unless @end.nil?
       cmd << "--lower-limit=#{@lower_limit}" unless @lower_limit.nil?
       cmd << "--upper-limit=#{@upper_limit}" unless @upper_limit.nil?
-      cmd << "--rigid" unless @rigid.nil?
+      cmd << '--rigid' unless @rigid.nil?
       cmd << "--base=#{@base}" unless @base.nil?
 
       @definitions.map { |e| cmd << e.to_s }

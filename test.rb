@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 17:35:54 pierre>
+# Time-stamp: <2014-09-22 18:02:53 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Test file for PRRD library
 
@@ -15,6 +15,10 @@ db.path = File.expand_path './dummy.rrd'
 
 # Create database if needed
 unless db.exists?
+  # Set infos
+  db.start = Time.now.to_i - 86_400
+  db.step = 300
+
   # Set datasources
   datasource = PRRD::Database::Datasource.new
   db.add_datasource datasource

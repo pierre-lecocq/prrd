@@ -8,11 +8,11 @@ Hold on please, work in progress ...
 
 ## Tests & demos
 
-### Simple autonomous test
+### Simple demo
 
 To generate a dummy example, simply run
 
-    rm dummy.*; ruby test.rb
+    rm dummy.*; ruby demo.rb
 
 ### Sample real-world examples
 

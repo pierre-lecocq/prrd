@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: line.rb
-# Time-stamp: <2014-09-23 10:53:02 pierre>
+# Time-stamp: <2014-09-23 11:10:24 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Line class for PRRD
 

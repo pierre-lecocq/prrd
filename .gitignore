@@ -1,5 +1,7 @@
 *.rrd
 *.png
+samples/*.rrd
+samples/*.png
 Gemfile.lock
 .yardoc
 doc

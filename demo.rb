@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-23 11:26:00 pierre>
+# Time-stamp: <2014-09-23 12:52:43 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Test file for PRRD library
 

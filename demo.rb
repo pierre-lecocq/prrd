@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: test.rb
-# Time-stamp: <2014-09-22 22:25:05 pierre>
+# Time-stamp: <2014-09-23 10:53:25 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Test file for PRRD library
 
@@ -114,6 +114,8 @@ graph.add_definition definition
 
 # Set areas
 
+=begin
+
 area = PRRD::Graph::Area.new
 area.value = "ds1"
 area.color = PRRD.color(:green)
@@ -125,6 +127,24 @@ area.value = "ds2"
 area.color = PRRD.color(:red)
 area.legend = "Dataset 2"
 graph.add_area area
+
+=end
+
+# Set lines
+
+line = PRRD::Graph::Line.new
+line.width = 3
+line.value = "ds1"
+line.color = PRRD.color(:green)
+line.legend = "Dataset 1"
+graph.add_line line
+
+line = PRRD::Graph::Line.new
+line.width = 1
+line.value = "ds2"
+line.color = PRRD.color(:red)
+line.legend = "Dataset 2"
+graph.add_line line
 
 # Create graph
 

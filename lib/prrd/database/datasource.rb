@@ -1,5 +1,5 @@
 # File: datasource.rb
-# Time-stamp: <2014-09-22 21:21:19 pierre>
+# Time-stamp: <2014-09-23 10:31:33 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Datasource class for PRRD
 
@@ -23,7 +23,14 @@ module PRRD
       def to_s
         fail 'Empty datasource object' if @data.empty?
 
-        "DS:#{@data.values.join ':'}"
+        chunks = ['DS']
+
+        @keys.each do |k|
+          next unless @data.key?(k)
+          chunks << @data[k]
+        end
+
+        chunks.join ':'
       end
     end
   end

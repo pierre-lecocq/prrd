@@ -1,25 +1,28 @@
-# File: area.rb
-# Time-stamp: <2014-09-23 10:31:27 pierre>
+#!/usr/bin/env ruby
+
+# File: line.rb
+# Time-stamp: <2014-09-23 10:53:02 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Area class for PRRD
+# Description: Line class for PRRD
 
 module PRRD
   class Graph
-    # PRRD Graph Area class
-    class Area < PRRD::Entity
+    # PRRD Graph Line class
+    class Line < PRRD::Entity
       # Constructor
       def initialize
         super
         @keys = [
           :value,
+          :width,
           :color,
           :legend
         ]
       end
 
-      # Transform to a AREA formatted string
+      # Transform to a LINE formatted string
       def to_s
-        fail 'Empty area object' if @data.empty?
+        fail 'Empty line object' if @data.empty?
 
         chunks = []
 
@@ -27,10 +30,10 @@ module PRRD
           next unless @data.key?(k)
           case k
           when :value
-            chunks << "AREA:#{@data[k]}#{@data[:color]}"
+            chunks << "LINE#{@data[:width]}:#{@data[k]}#{@data[:color]}"
           when :legend
             chunks << "\"#{@data[k]}\""
-          when :color
+          when :width, :color
             # nope
           else
             chunks << @data[k]

@@ -1,5 +1,5 @@
 # File: definition.rb
-# Time-stamp: <2014-09-22 22:37:09 pierre>
+# Time-stamp: <2014-09-23 10:20:46 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Definition class for PRRD
 
@@ -25,17 +25,17 @@ module PRRD
       def to_s
         fail 'Empty definition object' if @data.empty?
 
-        chunks = [
-          'DEF'
-        ]
+        chunks = []
 
-        @data.each do |k, v|
-          if k == :vname
-            chunks << "#{v}=#{@data[:rrdfile]}"
-          elsif k == :rrdfile
+        @keys.each do |k|
+          next unless @data.key?(k)
+          case k
+          when :vname
+            chunks << "DEF:#{@data[k]}=#{@data[:rrdfile]}"
+          when :rrdfile
             # nope
           else
-            chunks << v
+            chunks << @data[k]
           end
         end
 

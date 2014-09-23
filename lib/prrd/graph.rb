@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-22 22:37:45 pierre>
+# Time-stamp: <2014-09-23 10:48:17 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -12,11 +12,13 @@ module PRRD
     attr_accessor :lower_limit, :upper_limit, :rigid, :base
     attr_accessor :definitions
     attr_accessor :areas
+    attr_accessor :lines
 
     # Constructor
     def initialize
       @definitions = []
       @areas = []
+      @lines = []
     end
 
     # Check image existence
@@ -41,6 +43,12 @@ module PRRD
       @areas << area
     end
 
+    # Add a line object
+    # @param line [PRRD::Graph::Line]
+    def add_line(line)
+      @lines << line
+    end
+
     # Generate a graph
     # @return [String]
     def generate
@@ -62,6 +70,7 @@ module PRRD
 
       @definitions.map { |e| cmd << e.to_s }
       @areas.map { |e| cmd << e.to_s }
+      @lines.map { |e| cmd << e.to_s }
 
       # Exectute
       cmd = cmd.join ' '

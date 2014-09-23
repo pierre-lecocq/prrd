@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+# File: config.rb
+# Time-stamp: <2014-09-23 21:20:37 pierre>
+# Copyright (C) 2014 Pierre Lecocq
+# Description: Config file for PRRD sample files
+
+$prrd_database_root_path = Dir.home
+$prrd_image_root_path = Dir.home

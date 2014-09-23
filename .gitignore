@@ -2,6 +2,7 @@
 *.png
 samples/*.rrd
 samples/*.png
+samples/config.rb
 Gemfile.lock
 .yardoc
 doc

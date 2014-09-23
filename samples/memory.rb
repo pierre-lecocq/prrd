@@ -1,17 +1,24 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-23 15:34:42 pierre>
+# Time-stamp: <2014-09-23 21:21:20 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 
 require_relative '../lib/prrd'
 
+config_file = File.expand_path './config.rb'
+unless File.exist? config_file
+  fail 'Config file "config.rb" not found. You should copy "config.rb-example" to "config.rb" and adapt it to your needs'
+end
+
+require config_file
+
 ############################################
 # Database
 
 database = PRRD::Database.new
-database.path = File.expand_path '~/sample.memory.rrd'
+database.path = $prrd_database_root_path + '/sample.memory.rrd'
 
 # Create database if needed
 
@@ -76,7 +83,7 @@ database.update Time.now.to_i, `free -b | grep "Mem:" | awk '{print $3}'`
 # Graph
 
 graph = PRRD::Graph.new
-graph.path = File.expand_path '~/sample.memory.png'
+graph.path = $prrd_image_root_path + '/sample.memory.png'
 graph.database = database
 
 # Set infos

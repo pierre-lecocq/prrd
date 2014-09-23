@@ -6,16 +6,21 @@ A (simple) rrdtool ruby interface
 
 Hold on please, work in progress ...
 
-## Tests & demos
+## Sample scripts
 
-### Simple demo
+PRRD provides some real-world sample scripts located in the `samples` directory.
 
-To generate a dummy example, simply run
+- A `memory` script that graph the consumption of memory and swap on your system (2 areas)
+- A `cpu` script that graph the usage of your CPU (1 line)
 
-    rm dummy.*; ruby demo.rb
+To run them, simply type:
 
-### Sample real-world examples
+   ruby samples/memory.rb
+   ruby samples/cpu.rb
 
-PRRD also provides some real-world examples scripts located in the `sample` directory.
+Before that, you may be ask to copy `samples/config.rb-example` to `samples/config.rb` and edit it to fit to your needs
 
-    coming soon
+If you want to run them permanently, add these lines to your crontab (adpat paths and username):
+
+   */5 *   * * *   username ruby /home/username/prrd/samples/memory.rb > /dev/null
+   */5 *   * * *   usernaùe ruby /home/username/prrd/samples/cpu.rb > /dev/null

@@ -84,6 +84,8 @@ database.update Time.now.to_i, `free -b | grep "Mem:" | awk '{print $3}'`
 graph = PRRD::Graph.new
 graph.path = $prrd_image_root_path + '/sample.memory.png'
 graph.database = database
+graph.width = 800
+graph.height = 400
 
 # Set infos
 

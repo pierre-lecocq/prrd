@@ -84,6 +84,8 @@ database.update Time.now.to_i, `vmstat 1 1 | tail -1 | awk '{print $13}'`
 graph = PRRD::Graph.new
 graph.path = $prrd_image_root_path + '/sample.cpu.png'
 graph.database = database
+graph.width = 800
+graph.height = 400
 
 # Set infos
 

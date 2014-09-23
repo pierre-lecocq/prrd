@@ -9,6 +9,7 @@ module PRRD
     # Accessors
     attr_accessor :path, :database
     attr_accessor :title, :vertical_label, :start, :end
+    attr_accessor :width, :height
     attr_accessor :lower_limit, :upper_limit, :rigid, :base
     attr_accessor :definitions
     attr_accessor :areas
@@ -70,6 +71,8 @@ module PRRD
       cmd << "--title=\"#{@title}\"" unless @title.nil?
       cmd << "--vertical-label=\"#{@vertical_label}\"" unless @vertical_label.nil?
       cmd << "--start=#{@start}" unless @start.nil?
+      cmd << "--width=#{@width}" unless @width.nil?
+      cmd << "--height=#{@height}" unless @height.nil?
       cmd << "--end=#{@end}" unless @end.nil?
       cmd << "--lower-limit=#{@lower_limit}" unless @lower_limit.nil?
       cmd << "--upper-limit=#{@upper_limit}" unless @upper_limit.nil?

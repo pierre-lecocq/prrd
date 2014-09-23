@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-# File: memory.rb
-# Time-stamp: <2014-09-23 15:34:42 pierre>
+# File: cpu.rb
+# Time-stamp: <2014-09-23 15:40:29 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Sample PRRD usage - memory
+# Description: Sample PRRD usage - cpu
 
 require_relative '../lib/prrd'
 
@@ -11,7 +11,7 @@ require_relative '../lib/prrd'
 # Database
 
 database = PRRD::Database.new
-database.path = File.expand_path '~/sample.memory.rrd'
+database.path = File.expand_path '~/sample.cpu.rrd'
 
 # Create database if needed
 
@@ -25,7 +25,7 @@ unless database.exists?
   # Set datasources
 
   ds = PRRD::Database::Datasource.new
-  ds.name = 'memory'
+  ds.name = 'cpu'
   ds.type = 'GAUGE'
   ds.heartbeat = 600
   ds.min = 0
@@ -70,26 +70,28 @@ end
 
 # Update database
 
-database.update Time.now.to_i, `free -b | grep "Mem:" | awk '{print $3}'`
+database.update Time.now.to_i, `vmstat 1 1 | tail -1 | awk '{print $13}'`
 
 ############################################
 # Graph
 
 graph = PRRD::Graph.new
-graph.path = File.expand_path '~/sample.memory.png'
+graph.path = File.expand_path '~/sample.cpu.png'
 graph.database = database
 
 # Set infos
 
-graph.title = 'Memory usage'
-graph.vertical_label = 'B'
+graph.title = 'CPU usage'
+graph.vertical_label = '%'
+graph.lower_limit = 0
+graph.upper_limit = 100
 
 # Set definitions
 
 definition = PRRD::Graph::Definition.new
-definition.vname = 'memory'
+definition.vname = 'cpu'
 definition.rrdfile = database.path
-definition.ds_name = 'memory'
+definition.ds_name = 'cpu'
 definition.cf = 'AVERAGE'
 graph.add_definition definition
 
@@ -97,9 +99,9 @@ graph.add_definition definition
 
 line = PRRD::Graph::Line.new
 line.width = 2
-line.value = 'memory'
+line.value = 'cpu'
 line.color = PRRD.color(:blue, :dark)
-line.legend = 'memory'
+line.legend = 'cpu'
 graph.add_line line
 
 # Create graph

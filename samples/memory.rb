@@ -7,12 +7,11 @@
 
 require_relative '../lib/prrd'
 
-config_file = File.expand_path './config.rb'
-unless File.exist? config_file
+begin
+  require_relative './config.rb'
+rescue LoadError
   fail 'Config file "config.rb" not found. You should copy "config.rb-example" to "config.rb" and adapt it to your needs'
 end
-
-require config_file
 
 ############################################
 # Database

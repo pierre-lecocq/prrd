@@ -17,7 +17,7 @@ end
 # Database
 
 database = PRRD::Database.new
-database.path = $prrd_database_root_path + '/sample.cpu.rrd'
+database.path = $prrd_database_root_path + '/cpu.rrd'
 
 # Create database if needed
 
@@ -82,7 +82,7 @@ database.update Time.now.to_i, `vmstat 1 1 | tail -1 | awk '{print $13}'`
 # Graph
 
 graph = PRRD::Graph.new
-graph.path = $prrd_image_root_path + '/sample.cpu.png'
+graph.path = $prrd_image_root_path + '/cpu.png'
 graph.database = database
 graph.width = 800
 graph.height = 400

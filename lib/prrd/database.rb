@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-22 22:23:50 pierre>
+# Time-stamp: <2014-09-24 11:48:45 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -58,7 +58,9 @@ module PRRD
 
       # Execute
       cmd = cmd.join ' '
+      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
       `#{cmd}`
+
       'Database created successfully' if $CHILD_STATUS.nil?
     end
 
@@ -73,6 +75,7 @@ module PRRD
       cmd = "#{PRRD.bin} update #{@path} #{timestamp}:#{values.join ':'}"
 
       # Execute
+      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
       `#{cmd}`
       'Database updated successfully' if $CHILD_STATUS.nil?
     end

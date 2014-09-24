@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-24 10:44:36 pierre>
+# Time-stamp: <2014-09-24 11:28:15 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -13,8 +13,19 @@ module PRRD
   VERSION = [0, 2, 0].join('.')
 
   # Class variables
+  @@debug_mode = false
   @@colors = nil
   @@bin = nil
+
+  # Activate debug mode
+  def self.activate_debug_mode
+    @@debug_mode = true
+  end
+
+  # Activate debug mode
+  def self.debug_mode
+    @@debug_mode
+  end
 
   # Get rrdtool binary
   # @return [String]

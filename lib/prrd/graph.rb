@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-23 11:16:02 pierre>
+# Time-stamp: <2014-09-24 11:48:52 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -86,6 +86,7 @@ module PRRD
 
       # Exectute
       cmd = cmd.join ' '
+      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
       `#{cmd}`
       'Graph created successfully' if $CHILD_STATUS.nil?
     end

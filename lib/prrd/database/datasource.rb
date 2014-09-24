@@ -1,5 +1,5 @@
 # File: datasource.rb
-# Time-stamp: <2014-09-23 10:31:33 pierre>
+# Time-stamp: <2014-09-24 10:42:42 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Datasource class for PRRD
 
@@ -8,8 +8,7 @@ module PRRD
     # PRRD Database Datasource class
     class Datasource < PRRD::Entity
       # Constructor
-      def initialize
-        super
+      def initialize(values = nil)
         @keys = [
           :name,
           :type,
@@ -17,6 +16,8 @@ module PRRD
           :min,
           :max
         ]
+
+        super values
       end
 
       # Transform to a DS formatted string

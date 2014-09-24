@@ -1,5 +1,5 @@
 # File: archive.rb
-# Time-stamp: <2014-09-23 10:31:45 pierre>
+# Time-stamp: <2014-09-24 10:42:25 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Archive class for PRRD
 
@@ -8,14 +8,15 @@ module PRRD
     # PRRD Database Archive class
     class Archive < PRRD::Entity
       # Constructor
-      def initialize
-        super
+      def initialize(values = nil)
         @keys = [
           :cf,
           :xff,
           :steps,
           :rows
         ]
+
+        super values
       end
 
       # Transform to a RRA formatted string

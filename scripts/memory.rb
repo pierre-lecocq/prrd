@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-23 21:21:20 pierre>
+# Time-stamp: <2014-09-24 10:50:49 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 
@@ -30,50 +30,24 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new
-  ds.name = 'memory'
-  ds.type = 'GAUGE'
-  ds.heartbeat = 600
-  ds.min = 0
-  ds.max = 'U'
+  ds = PRRD::Database::Datasource.new name: 'ram', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
-  ds = PRRD::Database::Datasource.new
-  ds.name = 'swap'
-  ds.type = 'GAUGE'
-  ds.heartbeat = 600
-  ds.min = 0
-  ds.max = 'U'
+  ds = PRRD::Database::Datasource.new name: 'swap', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
   # Set archives
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 1
-  ar.rows = 576
+  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576
   database.add_archive ar
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 6
-  ar.rows = 672
+  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672
   database.add_archive ar
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 24
-  ar.rows = 732
+  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732
   database.add_archive ar
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 144
-  ar.rows = 1460
+  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460
   database.add_archive ar
 
   # Create
@@ -84,10 +58,10 @@ end
 
 # Update database
 
-memory_value = `free -b | grep "Mem:" | awk '{print $3}'`.chomp
+ram_value = `free -b | grep 'Mem:' | awk '{print $3"-($5"-"$6)"}'`.chomp
 swap_value = `free -b | grep "Swap:" | awk '{print $3}'`.chomp
 
-database.update Time.now.to_i, memory_value, swap_value
+database.update Time.now.to_i, ram_value, swap_value
 
 ############################################
 # Graph
@@ -97,41 +71,24 @@ graph.path = $prrd_image_root_path + '/memory.png'
 graph.database = database
 graph.width = 800
 graph.height = 400
-
-# Set infos
-
 graph.title = 'Memory usage'
 graph.vertical_label = 'B'
 
 # Set definitions
 
-definition = PRRD::Graph::Definition.new
-definition.vname = 'memory'
-definition.rrdfile = database.path
-definition.ds_name = 'memory'
-definition.cf = 'AVERAGE'
-graph.add_definition definition
+d = PRRD::Graph::Definition.new vname: 'ram', rrdfile: database.path, ds_name: 'ram', cf: 'AVERAGE'
+graph.add_definition d
 
-definition = PRRD::Graph::Definition.new
-definition.vname = 'swap'
-definition.rrdfile = database.path
-definition.ds_name = 'swap'
-definition.cf = 'AVERAGE'
-graph.add_definition definition
+d = PRRD::Graph::Definition.new vname: 'swap', rrdfile: database.path, ds_name: 'swap', cf: 'AVERAGE'
+graph.add_definition d
 
-# Set areas
+# Set lines
 
-area = PRRD::Graph::Area.new
-area.value = 'memory'
-area.color = PRRD.color(:blue, :dark)
-area.legend = 'memory'
-graph.add_area area
+line = PRRD::Graph::Line.new value: 'ram', width: 1, color: PRRD.color(:blue, :dark), legend: 'RAM'
+graph.add_line line
 
-area = PRRD::Graph::Area.new
-area.value = 'swap'
-area.color = PRRD.color(:red, :dark)
-area.legend = 'swap'
-graph.add_area area
+line = PRRD::Graph::Line.new value: 'swap', width: 1, color: PRRD.color(:red, :dark), legend: 'SWAP'
+graph.add_line line
 
 # Create graph
 

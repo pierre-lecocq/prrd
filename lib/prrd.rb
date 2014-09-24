@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-23 11:08:44 pierre>
+# Time-stamp: <2014-09-24 10:44:36 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -85,9 +85,15 @@ module PRRD
     attr_accessor :data, :keys
 
     # Constructor
-    def initialize
+    def initialize(values = nil)
       @data = {}
-      @keys = []
+
+      unless values.nil?
+        values.each do |k, v|
+          next unless @keys.include? k
+          send "#{k}=".to_sym, v
+        end
+      end
     end
 
     # Method missing

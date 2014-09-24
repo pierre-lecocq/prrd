@@ -1,5 +1,5 @@
 # File: area.rb
-# Time-stamp: <2014-09-23 10:31:27 pierre>
+# Time-stamp: <2014-09-24 10:41:34 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Area class for PRRD
 
@@ -8,13 +8,14 @@ module PRRD
     # PRRD Graph Area class
     class Area < PRRD::Entity
       # Constructor
-      def initialize
-        super
+      def initialize(values = nil)
         @keys = [
           :value,
           :color,
           :legend
         ]
+
+        super values
       end
 
       # Transform to a AREA formatted string

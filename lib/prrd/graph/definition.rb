@@ -1,5 +1,5 @@
 # File: definition.rb
-# Time-stamp: <2014-09-23 10:20:46 pierre>
+# Time-stamp: <2014-09-24 10:41:45 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Definition class for PRRD
 
@@ -8,8 +8,7 @@ module PRRD
     # PRRD Graph Definition class
     class Definition < PRRD::Entity
       # Constructor
-      def initialize
-        super
+      def initialize(values = nil)
         @keys = [
           :vname,
           :rrdfile,
@@ -19,6 +18,8 @@ module PRRD
           :start,
           :end
         ]
+
+        super values
       end
 
       # Transform to a DEF formatted string

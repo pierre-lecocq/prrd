@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: print.rb
-# Time-stamp: <2014-09-23 11:23:31 pierre>
+# Time-stamp: <2014-09-24 10:41:27 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Print class for PRRD
 
@@ -10,7 +10,7 @@ module PRRD
     # PRRD Graph Line class
     class Print < PRRD::Entity
       # Constructor
-      def initialize
+      def initialize(values = nil)
         super
         @keys = [
           :gprint,
@@ -18,6 +18,8 @@ module PRRD
           :cf,
           :format
         ]
+
+        super values
       end
 
       # Transform to a PRINT formatted string

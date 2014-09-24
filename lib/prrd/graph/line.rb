@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: line.rb
-# Time-stamp: <2014-09-23 11:10:24 pierre>
+# Time-stamp: <2014-09-24 10:41:57 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Line class for PRRD
 
@@ -10,14 +10,15 @@ module PRRD
     # PRRD Graph Line class
     class Line < PRRD::Entity
       # Constructor
-      def initialize
-        super
+      def initialize(values = nil)
         @keys = [
           :value,
           :width,
           :color,
           :legend
         ]
+
+        super values
       end
 
       # Transform to a LINE formatted string

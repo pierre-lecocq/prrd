@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: network.rb
-# Time-stamp: <2014-09-24 23:01:40 pierre>
+# Time-stamp: <2014-09-24 23:38:25 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - network
 
@@ -35,10 +35,10 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new name: 'recv', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'recv', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
-  ds = PRRD::Database::Datasource.new name: 'send', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'send', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
   # Set archives
@@ -88,10 +88,10 @@ graph.add_definition d
 
 # Set lines
 
-area = PRRD::Graph::Area.new value: 'recv', color: PRRD.color(:blue, :dark), legend: 'Reveived'
+area = PRRD::Graph::Area.new value: 'recv', color: PRRD.color(:blue), legend: 'Reveived'
 graph.add_area area
 
-area = PRRD::Graph::Area.new value: 'send', color: PRRD.color(:red, :dark), legend: 'Send'
+area = PRRD::Graph::Area.new value: 'send', color: PRRD.color(:red), legend: 'Send'
 graph.add_area area
 
 # Create graph

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-24 21:51:26 pierre>
+# Time-stamp: <2014-09-24 23:37:26 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -35,10 +35,10 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new name: 'user', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'user', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
-  ds = PRRD::Database::Datasource.new name: 'sys', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'sys', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
   # Set archives
@@ -109,10 +109,10 @@ graph.add_definition d
 
 # Set lines
 
-area = PRRD::Graph::Area.new value: 'user', color: PRRD.color(:green, :light), legend: 'User'
+area = PRRD::Graph::Area.new value: 'user', color: PRRD.color(:blue), legend: 'User'
 graph.add_area area
 
-area = PRRD::Graph::Area.new value: 'sys', color: PRRD.color(:orange, :light), legend: 'System'
+area = PRRD::Graph::Area.new value: 'sys', color: PRRD.color(:red), legend: 'System'
 graph.add_area area
 
 # Create graph

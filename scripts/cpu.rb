@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: cpu.rb
-# Time-stamp: <2014-09-24 21:05:40 pierre>
+# Time-stamp: <2014-09-24 21:10:41 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - cpu
 
@@ -112,7 +112,7 @@ graph.add_definition definition
 
 area = PRRD::Graph::Area.new
 area.value = 'cpu'
-area.color = PRRD.color(:red, :dark)
+area.color = PRRD.color(:yellow, :light)
 area.legend = 'cpu'
 graph.add_area area
 

@@ -1,8 +1,8 @@
 *.rrd
 *.png
-samples/*.rrd
-samples/*.png
-samples/config.rb
+scripts/*.rrd
+scripts/*.png
+scripts/config.rb
 Gemfile.lock
 .yardoc
 doc

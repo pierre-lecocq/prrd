@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-24 14:25:31 pierre>
+# Time-stamp: <2014-09-24 16:45:56 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 
@@ -97,13 +97,13 @@ graph.add_definition d
 d = PRRD::Graph::Definition.new vname: 'swap', rrdfile: database.path, ds_name: 'swap', cf: 'AVERAGE'
 graph.add_definition d
 
-# Set lines
+# Set area
 
-line = PRRD::Graph::Line.new value: 'ram', width: 1, color: PRRD.color(:blue, :dark), legend: 'RAM'
-graph.add_line line
+area = PRRD::Graph::Area.new value: 'ram', color: PRRD.color(:blue, :dark), legend: 'RAM'
+graph.add_area area
 
-line = PRRD::Graph::Line.new value: 'swap', width: 1, color: PRRD.color(:red, :dark), legend: 'Swap'
-graph.add_line line
+area = PRRD::Graph::Area.new value: 'swap', color: PRRD.color(:red, :dark), legend: 'Swap'
+graph.add_area area
 
 # Create graph
 

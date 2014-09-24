@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-24 15:39:38 pierre>
+# Time-stamp: <2014-09-24 21:08:52 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -13,8 +13,8 @@ rescue LoadError
   puts '[WARNING] Config file "config.rb" not found. You should copy "config.rb-example" to "config.rb" and adapt it to your needs'
 end
 
-$prrd_database_root_path = Dir.home if $prrd_database_root_path.nil?
-$prrd_image_root_path = Dir.home if $prrd_image_root_path.nil?
+$prrd_database_root_path ||= Dir.home
+$prrd_image_root_path ||= Dir.home
 $prrd_graph_width ||= 600
 $prrd_graph_height ||= 300
 
@@ -66,7 +66,7 @@ end
 processes = { user: 0, sys: 0 }
 File.open('/proc/stat', 'r') do |fd|
   fd.each_line do |line|
-    if line =~ /processes\s+(\d+)\s+(\d+)\s+(\d+)/
+    if line =~ /cpu\s+(\d+)\s+(\d+)\s+(\d+)/
       processes[:user] = $1.to_i
       processes[:sys] = $3.to_i
     end
@@ -96,11 +96,11 @@ graph.add_definition d
 
 # Set lines
 
-line = PRRD::Graph::Line.new value: 'user', width: 1, color: PRRD.color(:blue, :dark), legend: 'User'
-graph.add_line line
+area = PRRD::Graph::Area.new value: 'user', color: PRRD.color(:green, :dark), legend: 'User'
+graph.add_area area
 
-line = PRRD::Graph::Line.new value: 'sys', width: 1, color: PRRD.color(:red, :dark), legend: 'System'
-graph.add_line line
+area = PRRD::Graph::Area.new value: 'sys', color: PRRD.color(:orange, :dark), legend: 'System'
+graph.add_area area
 
 # Create graph
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-# File: process.rb
-# Time-stamp: <2014-09-24 21:51:26 pierre>
+# File: network.rb
+# Time-stamp: <2014-09-24 23:01:40 pierre>
 # Copyright (C) 2014 Pierre Lecocq
-# Description: Sample PRRD usage - process
+# Description: Sample PRRD usage - network
 
 require_relative '../lib/prrd'
 
@@ -22,7 +22,7 @@ $prrd_graph_height ||= 300
 # Database
 
 database = PRRD::Database.new
-database.path = $prrd_database_root_path + '/process.rrd'
+database.path = $prrd_database_root_path + '/network.rrd'
 
 # Create database if needed
 
@@ -35,10 +35,10 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new name: 'user', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'recv', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
-  ds = PRRD::Database::Datasource.new name: 'sys', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  ds = PRRD::Database::Datasource.new name: 'send', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
   database.add_datasource ds
 
   # Set archives
@@ -63,56 +63,35 @@ end
 
 # Update database
 
-processes = { user: 0, sys: 0 }
-File.open('/proc/stat', 'r') do |fd|
-  fd.each_line do |line|
-    if line =~ /cpu\s+(\d+)\s+(\d+)\s+(\d+)/
-      processes[:user] = $1.to_i
-      processes[:sys] = $3.to_i
-    end
-  end
-end
+recv_value = `cat /proc/net/dev | grep eth0 | awk '{print $2}'`.chomp
+send_value = `cat /proc/net/dev | grep eth0 | awk '{print $9}'`.chomp
 
-database.update Time.now.to_i, processes[:user], processes[:sys]
+database.update Time.now.to_i, recv_value, send_value
 
 ############################################
 # Graph
 
 graph = PRRD::Graph.new
-graph.path = $prrd_image_root_path + '/process.png'
+graph.path = $prrd_image_root_path + '/network.png'
 graph.database = database
 graph.width = $prrd_graph_width
 graph.height = $prrd_graph_height
-graph.title = 'Processes'
-
-# Set colors
-
-c = PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
-graph.add_color c
+graph.title = 'Network'
 
 # Set definitions
 
-d = PRRD::Graph::Definition.new vname: 'user', rrdfile: database.path, ds_name: 'user', cf: 'AVERAGE'
+d = PRRD::Graph::Definition.new vname: 'recv', rrdfile: database.path, ds_name: 'recv', cf: 'AVERAGE'
 graph.add_definition d
 
-d = PRRD::Graph::Definition.new vname: 'sys', rrdfile: database.path, ds_name: 'sys', cf: 'AVERAGE'
+d = PRRD::Graph::Definition.new vname: 'send', rrdfile: database.path, ds_name: 'send', cf: 'AVERAGE'
 graph.add_definition d
 
 # Set lines
 
-area = PRRD::Graph::Area.new value: 'user', color: PRRD.color(:green, :light), legend: 'User'
+area = PRRD::Graph::Area.new value: 'recv', color: PRRD.color(:blue, :dark), legend: 'Reveived'
 graph.add_area area
 
-area = PRRD::Graph::Area.new value: 'sys', color: PRRD.color(:orange, :light), legend: 'System'
+area = PRRD::Graph::Area.new value: 'send', color: PRRD.color(:red, :dark), legend: 'Send'
 graph.add_area area
 
 # Create graph

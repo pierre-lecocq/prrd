@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-24 21:31:13 pierre>
+# Time-stamp: <2014-09-25 23:51:45 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -78,16 +78,18 @@ module PRRD
   end
 
   # Get a color
-  # @param name [Symbol, String]
+  # @param name [Symbol]
+  # @param tint [Symbol, nil]
+  # @param alpha [Symbol, nil]
   # @return [String]
-  def self.color(name, tint = :light)
+  def self.color(name, tint = :light, alpha = nil)
     name = name.to_sym
     tint = tint.to_sym
 
     fail "Unknown color #{name}" unless colors.key? name
     fail "Unknown tint #{tint}" unless colors[name].key? tint
 
-    colors[name][tint]
+    alpha.nil? ? colors[name][tint] : "colors[name][tint]#{alpha}"
   end
 
   # Entity base class

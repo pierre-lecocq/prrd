@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: network.rb
-# Time-stamp: <2014-09-25 12:53:08 pierre>
+# Time-stamp: <2014-09-25 22:51:48 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - network
 
@@ -17,6 +17,7 @@ $prrd_database_root_path ||= Dir.home
 $prrd_image_root_path ||= Dir.home
 $prrd_graph_width ||= 600
 $prrd_graph_height ||= 300
+$prrd_network_interface ||= 'eth0'
 
 ############################################
 # Database
@@ -63,8 +64,8 @@ end
 
 # Update database
 
-recv_value = `cat /proc/net/dev | grep eth0 | awk '{print $2}'`.chomp
-send_value = `cat /proc/net/dev | grep eth0 | awk '{print $9}'`.chomp
+recv_value = `cat /proc/net/dev | grep #{$prrd_network_interface} | awk '{print $2}'`.chomp
+send_value = `cat /proc/net/dev | grep #{$prrd_network_interface} | awk '{print $9}'`.chomp
 
 database.update Time.now.to_i, recv_value, send_value
 

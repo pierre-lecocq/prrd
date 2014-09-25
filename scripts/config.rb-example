@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: config.rb
-# Time-stamp: <2014-09-24 21:06:47 pierre>
+# Time-stamp: <2014-09-25 22:57:21 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Config file for PRRD sample files
 
@@ -15,6 +15,10 @@ $prrd_image_root_path = Dir.home
 $prrd_graph_width = 400
 $prrd_graph_height = 200
 
-# Activate debug mode
+# Network interface
 
-# PRRD.activate_debug_mode
+$prrd_network_interface = 'eth0'
+
+# Activate debug mode (uncomment below)
+
+#PRRD.activate_debug_mode

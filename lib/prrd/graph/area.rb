@@ -1,5 +1,5 @@
 # File: area.rb
-# Time-stamp: <2014-09-24 10:41:34 pierre>
+# Time-stamp: <2014-09-25 23:53:55 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Area class for PRRD
 
@@ -12,7 +12,8 @@ module PRRD
         @keys = [
           :value,
           :color,
-          :legend
+          :legend,
+          :stack
         ]
 
         super values
@@ -31,6 +32,8 @@ module PRRD
             chunks << "AREA:#{@data[k]}#{@data[:color]}"
           when :legend
             chunks << "\"#{@data[k]}\""
+          when :stack
+            chunks << "STACK"
           when :color
             # nope
           else

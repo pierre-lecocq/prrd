@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: apache.rb
-# Time-stamp: <2014-09-25 12:55:38 pierre>
+# Time-stamp: <2014-09-25 13:10:44 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - apache
 
@@ -34,19 +34,26 @@ unless database.exists?
   database.step = 300
 
   # Set datasources
+  datasources = [
+    PRRD::Database::Datasource.new({name: 'status200', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status304', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status404', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status500', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'others', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'})
+  ]
 
-  database.add_datasource PRRD::Database::Datasource.new name: 'status200', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource PRRD::Database::Datasource.new name: 'status304', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource PRRD::Database::Datasource.new name: 'status404', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource PRRD::Database::Datasource.new name: 'status500', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource PRRD::Database::Datasource.new name: 'others', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'
+  database.add_datasources datasources
 
   # Set archives
 
-  database.add_archive PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576
-  database.add_archive PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672
-  database.add_archive PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732
-  database.add_archive PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460
+  archives = [
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460})
+  ]
+
+  database.add_archives archives
 
   # Create
 
@@ -88,26 +95,38 @@ graph.vertical_label = 'reqs'
 
 # Set colors
 
-graph.add_color PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
-graph.add_color PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
-graph.add_color PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
-graph.add_color PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
+colors = [
+  PRRD::Graph::Color.new({colortag: 'BACK', color: '#151515'}),
+  PRRD::Graph::Color.new({colortag: 'FONT', color: '#e5e5e5'}),
+  PRRD::Graph::Color.new({colortag: 'CANVAS', color: '#252525'}),
+  PRRD::Graph::Color.new({colortag: 'ARROW', color: '#ff0000'})
+]
+
+graph.add_colors colors
 
 # Set definitions
 
-graph.add_definition PRRD::Graph::Definition.new vname: 'status200', rrdfile: database.path, ds_name: 'status200', cf: 'AVERAGE'
-graph.add_definition PRRD::Graph::Definition.new vname: 'status304', rrdfile: database.path, ds_name: 'status304', cf: 'AVERAGE'
-graph.add_definition PRRD::Graph::Definition.new vname: 'status404', rrdfile: database.path, ds_name: 'status404', cf: 'AVERAGE'
-graph.add_definition PRRD::Graph::Definition.new vname: 'status500', rrdfile: database.path, ds_name: 'status500', cf: 'AVERAGE'
-graph.add_definition PRRD::Graph::Definition.new vname: 'others', rrdfile: database.path, ds_name: 'others', cf: 'AVERAGE'
+definitions = [
+  PRRD::Graph::Definition.new({vname: 'status200', rrdfile: database.path, ds_name: 'status200', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'status304', rrdfile: database.path, ds_name: 'status304', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'status404', rrdfile: database.path, ds_name: 'status404', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'status500', rrdfile: database.path, ds_name: 'status500', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'others', rrdfile: database.path, ds_name: 'others', cf: 'AVERAGE'})
+]
+
+graph.add_definitions definitions
 
 # Set lines
 
-graph.add_area PRRD::Graph::Area.new value: 'status200', color: PRRD.color(:green), legend: '200'
-graph.add_area PRRD::Graph::Area.new value: 'status304', color: PRRD.color(:orange), legend: '304'
-graph.add_area PRRD::Graph::Area.new value: 'status404', color: PRRD.color(:red), legend: '404'
-graph.add_area PRRD::Graph::Area.new value: 'status500', color: PRRD.color(:pink), legend: '500'
-graph.add_area PRRD::Graph::Area.new value: 'others', color: PRRD.color(:yellow), legend: 'Others'
+areas = [
+  PRRD::Graph::Area.new({value: 'status200', color: PRRD.color(:green), legend: '200'}),
+  PRRD::Graph::Area.new({value: 'status304', color: PRRD.color(:orange), legend: '304'}),
+  PRRD::Graph::Area.new({value: 'status404', color: PRRD.color(:red), legend: '404'}),
+  PRRD::Graph::Area.new({value: 'status500', color: PRRD.color(:pink), legend: '500'}),
+  PRRD::Graph::Area.new({value: 'others', color: PRRD.color(:yellow), legend: 'Others'})
+]
+
+graph.add_areas areas
 
 # Create graph
 

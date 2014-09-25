@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-24 21:36:15 pierre>
+# Time-stamp: <2014-09-25 13:04:56 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -47,10 +47,22 @@ module PRRD
       @colors << color
     end
 
+    # Add color objects
+    # @param colors [Array]
+    def add_colors(colors)
+      @colors = colors
+    end
+
     # Add a definition object
     # @param definition [PRRD::Graph::Definition]
     def add_definition(definition)
       @definitions << definition
+    end
+
+    # Add definition objects
+    # @param definitions [Array]
+    def add_definitions(definitions)
+      @definitions = definitions
     end
 
     # Add an area object
@@ -59,16 +71,34 @@ module PRRD
       @areas << area
     end
 
+    # Add area objects
+    # @param areas [Array]
+    def add_areas(areas)
+      @areas = areas
+    end
+
     # Add a line object
     # @param line [PRRD::Graph::Line]
     def add_line(line)
       @lines << line
     end
 
+    # Add line objects
+    # @param lines [Array]
+    def add_lines(lines)
+      @lines = lines
+    end
+
     # Add a print object
     # @param pr [PRRD::Graph::Print]
     def add_print(pr)
       @prints << pr
+    end
+
+    # Add print objects
+    # @param prints [Array]
+    def add_prints(prs)
+      @prints = prs
     end
 
     # Generate a graph

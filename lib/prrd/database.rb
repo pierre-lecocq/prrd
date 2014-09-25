@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-24 11:48:45 pierre>
+# Time-stamp: <2014-09-25 13:05:01 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -35,10 +35,22 @@ module PRRD
       @datasources << datasource
     end
 
+    # Add datasource objects
+    # @param datasource [Array]
+    def add_datasources(datasources)
+      @datasources = datasources
+    end
+
     # Add an archive object
     # @param archive [PRRD::Database::Archive]
     def add_archive(archive)
       @archives << archive
+    end
+
+    # Add archive objects
+    # @param archives [Array]
+    def add_archives(archives)
+      @archives = archives
     end
 
     # Create a database

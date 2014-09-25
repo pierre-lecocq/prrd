@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-24 23:37:39 pierre>
+# Time-stamp: <2014-09-25 09:48:39 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 
@@ -13,8 +13,8 @@ rescue LoadError
   puts '[WARNING] Config file "config.rb" not found. You should copy "config.rb-example" to "config.rb" and adapt it to your needs'
 end
 
-$prrd_database_root_path ||= Dir.home if $prrd_database_root_path.nil?
-$prrd_image_root_path ||= Dir.home if $prrd_image_root_path.nil?
+$prrd_database_root_path ||= Dir.home
+$prrd_image_root_path ||= Dir.home
 $prrd_graph_width ||= 600
 $prrd_graph_height ||= 300
 

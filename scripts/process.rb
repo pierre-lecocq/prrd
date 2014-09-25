@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-24 23:37:26 pierre>
+# Time-stamp: <2014-09-25 12:52:50 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -87,17 +87,10 @@ graph.title = 'Processes'
 
 # Set colors
 
-c = PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
-graph.add_color c
-
-c = PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
-graph.add_color c
+graph.add_color PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
+graph.add_color PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
+graph.add_color PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
+graph.add_color PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
 
 # Set definitions
 

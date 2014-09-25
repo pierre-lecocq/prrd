@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: network.rb
-# Time-stamp: <2014-09-24 23:38:25 pierre>
+# Time-stamp: <2014-09-25 12:53:08 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - network
 
@@ -77,6 +77,7 @@ graph.database = database
 graph.width = $prrd_graph_width
 graph.height = $prrd_graph_height
 graph.title = 'Network'
+graph.vertical_label = 'B'
 
 # Set definitions
 

@@ -35,11 +35,11 @@ unless database.exists?
 
   # Set datasources
   datasources = [
-    PRRD::Database::Datasource.new({name: 'status200', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
-    PRRD::Database::Datasource.new({name: 'status304', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
-    PRRD::Database::Datasource.new({name: 'status404', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
-    PRRD::Database::Datasource.new({name: 'status500', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
-    PRRD::Database::Datasource.new({name: 'others', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'})
+    PRRD::Database::Datasource.new({name: 'status200', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status304', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status404', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'status500', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'others', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'})
   ]
 
   database.add_datasources datasources

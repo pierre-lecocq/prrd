@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-25 09:48:39 pierre>
+# Time-stamp: <2014-09-25 13:18:01 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 

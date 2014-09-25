@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: cpu.rb
-# Time-stamp: <2014-09-24 23:37:56 pierre>
+# Time-stamp: <2014-09-25 13:25:11 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - cpu
 

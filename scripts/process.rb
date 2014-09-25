@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-25 12:52:50 pierre>
+# Time-stamp: <2014-09-25 13:32:03 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 

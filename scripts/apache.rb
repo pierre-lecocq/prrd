@@ -64,7 +64,7 @@ end
 # Update database
 
 log_file = '/home/www/logs/apache2-access.log'
-tod = Time.now.strftime '%d/%b/%Y'
+tod = (Time.now - 300).strftime '%d/%b/%Y:%H:%M'
 requests = { status200: 0, status304: 0, status404: 0, status500: 0, others: 0 }
 File.open(log_file, 'r') do |fd|
   fd.each_line do |line|

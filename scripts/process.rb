@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-27 13:06:41 pierre>
+# Time-stamp: <2014-09-27 13:38:28 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -114,6 +114,25 @@ ars = [
 ]
 
 graph.add_areas ars
+
+# Set [v|h]rules
+
+hrs = [
+  PRRD::Graph::Hrule.new({value: 20, color: '#666666'}),
+  PRRD::Graph::Hrule.new({value: 40, color: '#666666'}),
+  PRRD::Graph::Hrule.new({value: 60, color: '#666666'}),
+  PRRD::Graph::Hrule.new({value: 80, color: '#666666'})
+]
+
+graph.add_hrules hrs
+
+vrs = [
+  PRRD::Graph::Vrule.new({time: (Time.now.to_i - 21_600), color: '#666666'}),
+  PRRD::Graph::Vrule.new({time: (Time.now.to_i - 43_200), color: '#666666'}),
+  PRRD::Graph::Vrule.new({time: (Time.now.to_i - 64_800), color: '#666666'})
+]
+
+graph.add_vrules vrs
 
 # Create graph
 

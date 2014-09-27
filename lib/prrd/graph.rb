@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-27 10:08:29 pierre>
+# Time-stamp: <2014-09-27 13:35:32 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -21,6 +21,7 @@ module PRRD
     attr_accessor :areas
     attr_accessor :lines
     attr_accessor :prints
+    attr_accessor :hrules, :vrules
 
     # Constructor
     def initialize(values = nil)
@@ -29,6 +30,8 @@ module PRRD
       @areas = []
       @lines = []
       @prints = []
+      @hrules = []
+      @vrules = []
 
       unless values.nil?
         values.each do |k, v|
@@ -109,6 +112,30 @@ module PRRD
       @prints = prs
     end
 
+    # Add a hrule object
+    # @param pr [PRRD::Graph::Hrule]
+    def add_hrule(pr)
+      @hrules << pr
+    end
+
+    # Add hrule objects
+    # @param hrules [Array]
+    def add_hrules(prs)
+      @hrules = prs
+    end
+
+    # Add a vrule object
+    # @param pr [PRRD::Graph::Vrule]
+    def add_vrule(pr)
+      @vrules << pr
+    end
+
+    # Add vrule objects
+    # @param vrules [Array]
+    def add_vrules(prs)
+      @vrules = prs
+    end
+
     # Add an object
     # @param object [Object]
     def <<(object)
@@ -120,6 +147,10 @@ module PRRD
         add_line object
       elsif object.is_a? PRRD::Graph::Print
         add_print object
+      elsif object.is_a? PRRD::Graph::Hrule
+        add_hrule object
+      elsif object.is_a? PRRD::Graph::Vrule
+        add_vrule object
       else
         fail 'Can not add this kind of object in PRRD::Graph'
       end
@@ -163,6 +194,8 @@ module PRRD
       @areas.map { |e| cmd << e.to_s }
       @lines.map { |e| cmd << e.to_s }
       @prints.map { |e| cmd << e.to_s }
+      @hrules.map { |e| cmd << e.to_s }
+      @vrules.map { |e| cmd << e.to_s }
 
       # Exectute
       cmd = cmd.join ' '

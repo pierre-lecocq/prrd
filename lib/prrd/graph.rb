@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-27 13:35:32 pierre>
+# Time-stamp: <2014-09-27 15:25:23 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -141,6 +141,8 @@ module PRRD
     def <<(object)
       if object.is_a? PRRD::Graph::Definition
         add_definition object
+      elsif object.is_a? PRRD::Graph::Color
+        add_color object
       elsif object.is_a? PRRD::Graph::Area
         add_area object
       elsif object.is_a? PRRD::Graph::Line

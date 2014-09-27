@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-27 12:55:55 pierre>
+# Time-stamp: <2014-09-27 13:06:41 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -90,7 +90,6 @@ cls = [
   PRRD::Graph::Color.new({colortag: 'FONT', color: '#e5e5e5'}),
   PRRD::Graph::Color.new({colortag: 'CANVAS', color: '#252525'}),
   PRRD::Graph::Color.new({colortag: 'ARROW', color: '#ff0000'})
-
 ]
 
 graph.add_colors cls
@@ -107,11 +106,11 @@ graph.add_definitions dfs
 # Set areas
 
 color1 = PRRD::Color.new(:green)
-color2 = color1.darken(50)
+color2 = color1.darken(60)
 
 ars = [
   PRRD::Graph::Area.new({value: 'user', color: color1, legend: 'User'}),
-  PRRD::Graph::Area.new({value: 'sys', color: color2, legend: 'System'})
+  PRRD::Graph::Area.new({value: 'sys', color: color2, legend: 'System', stack: true})
 ]
 
 graph.add_areas ars

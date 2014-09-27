@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: line.rb
-# Time-stamp: <2014-09-24 10:41:57 pierre>
+# Time-stamp: <2014-09-27 13:04:51 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Line class for PRRD
 
@@ -15,7 +15,8 @@ module PRRD
           :value,
           :width,
           :color,
-          :legend
+          :legend,
+          :stack
         ]
 
         super values
@@ -34,6 +35,8 @@ module PRRD
             chunks << "LINE#{@data[:width]}:#{@data[k]}#{@data[:color]}"
           when :legend
             chunks << "\"#{@data[k]}\""
+          when :stack
+            chunks << "STACK"
           when :width, :color
             # nope
           else

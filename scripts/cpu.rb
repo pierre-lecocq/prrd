@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: cpu.rb
-# Time-stamp: <2014-09-27 10:39:29 pierre>
+# Time-stamp: <2014-09-27 12:02:02 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - cpu
 
@@ -121,7 +121,7 @@ graph.add_definition PRRD::Graph::Definition.new(values)
 values = {
   width: 1,
   value: 'cpu',
-  color: PRRD.color(:red),
+  color: PRRD::Color.new(:red),
   legend: 'cpu'
 }
 

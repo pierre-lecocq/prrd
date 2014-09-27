@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: network.rb
-# Time-stamp: <2014-09-27 11:27:32 pierre>
+# Time-stamp: <2014-09-27 12:02:57 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - network
 
@@ -79,8 +79,8 @@ graph << PRRD::Graph::Definition.new({vname: 'send', rrdfile: database.path, ds_
 
 # Set areas
 
-graph << PRRD::Graph::Area.new({value: 'recv', color: PRRD.color(:blue), legend: 'Reveived'})
-graph << PRRD::Graph::Area.new({value: 'send', color: PRRD.color(:red), legend: 'Sent'})
+graph << PRRD::Graph::Area.new({value: 'recv', color: PRRD::Color.new(:blue), legend: 'Reveived'})
+graph << PRRD::Graph::Area.new({value: 'send', color: PRRD::Color.new(:red), legend: 'Sent'})
 
 # Create graph
 

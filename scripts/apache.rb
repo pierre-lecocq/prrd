@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: apache.rb
-# Time-stamp: <2014-09-27 11:32:27 pierre>
+# Time-stamp: <2014-09-27 12:02:35 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - apache
 
@@ -104,11 +104,11 @@ graph << PRRD::Graph::Definition.new({vname: 'others', rrdfile: database.path, d
 
 # Set areas
 
-graph << PRRD::Graph::Area.new({value: 'status200', color: PRRD.color(:green), legend: '200'})
-graph << PRRD::Graph::Area.new({value: 'status304', color: PRRD.color(:orange), legend: '304'})
-graph << PRRD::Graph::Area.new({value: 'status404', color: PRRD.color(:red), legend: '404'})
-graph << PRRD::Graph::Area.new({value: 'status500', color: PRRD.color(:pink), legend: '500'})
-graph << PRRD::Graph::Area.new({value: 'others', color: PRRD.color(:yellow), legend: 'Others'})
+graph << PRRD::Graph::Area.new({value: 'status200', color: PRRD::Color.new(:green), legend: '200'})
+graph << PRRD::Graph::Area.new({value: 'status304', color: PRRD::Color.new(:orange), legend: '304'})
+graph << PRRD::Graph::Area.new({value: 'status404', color: PRRD::Color.new(:red), legend: '404'})
+graph << PRRD::Graph::Area.new({value: 'status500', color: PRRD::Color.new(:pink), legend: '500'})
+graph << PRRD::Graph::Area.new({value: 'others', color: PRRD::Color.new(:yellow), legend: 'Others'})
 
 # Create graph
 

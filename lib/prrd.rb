@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-27 10:04:32 pierre>
+# Time-stamp: <2014-09-27 12:53:57 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -38,58 +38,81 @@ module PRRD
     @@bin
   end
 
-  # Get colors
-  # @return [Hash]
-  def self.colors
-    if @@colors.nil?
-      @@colors = {
-        red: {
-          light: '#EA644A',
-          dark: '#CC3118'
-        },
-        orange: {
-          light: '#EC9D48',
-          dark: '#CC7016'
-        },
-        yellow: {
-          light: '#ECD748',
-          dark: '#C9B215'
-        },
-        green: {
-          light: '#54EC48',
-          dark: '#24BC14'
-        },
-        blue: {
-          light: '#48C4EC',
-          dark: '#1598C3'
-        },
-        pink: {
-          light: '#DE48EC',
-          dark: '#B415C7'
-        },
-        purple: {
-          light: '#7648EC',
-          dark: '#4D18E4'
-        }
-      }
+  # Color class
+  class Color
+    # Accessors
+    attr_accessor :collection, :hexcode
+
+    # Constructor
+    # @param name [Symbol]
+    # @param tint [Symbol, nil]
+    # @param alpha [Symbol, nil]
+    def initialize(name, tint = nil, alpha = nil)
+      if name.is_a?(String) && name.include?('#')
+        @hexcode = name
+      else
+        @hexcode = to_hex(name, tint, alpha)
+      end
     end
 
-    @@colors
-  end
+    # Translate into hexcode
+    # @param name [Symbol]
+    # @param tint [Symbol, nil]
+    # @param alpha [Symbol, nil]
+    # @param [String]
+    def to_hex(name, tint = nil, alpha = nil)
+      if @collection.nil?
+        @collection = {
+          red: {light: '#EA644A', dark: '#CC3118'},
+          orange: {light: '#EC9D48', dark: '#CC7016'},
+          yellow: {light: '#ECD748', dark: '#C9B215'},
+          green: {light: '#54EC48', dark: '#24BC14'},
+          blue: {light: '#48C4EC', dark: '#1598C3'},
+          pink: {light: '#DE48EC', dark: '#B415C7'},
+          purple: {light: '#7648EC', dark: '#4D18E4'}
+        }
+      end
 
-  # Get a color
-  # @param name [Symbol]
-  # @param tint [Symbol, nil]
-  # @param alpha [Symbol, nil]
-  # @return [String]
-  def self.color(name, tint = :light, alpha = nil)
-    name = name.to_sym
-    tint = tint.to_sym
+      name = name.to_sym
+      tint = tint.nil? ? :light : tint.to_sym
 
-    fail "Unknown color #{name}" unless colors.key? name
-    fail "Unknown tint #{tint}" unless colors[name].key? tint
+      fail "Unknown color #{name}" unless @collection.key? name
+      fail "Unknown tint #{tint}" unless @collection[name].key? tint
 
-    alpha.nil? ? colors[name][tint] : "colors[name][tint]#{alpha}"
+      alpha.nil? ? @collection[name][tint] : @collection[name][tint] + alpha
+    end
+
+    # Darken the color
+    # @param percentage [Integer]
+    # @return [String]
+    def darken(percentage)
+      fail 'Can not operate on a non-hexadecimal color' if @hexcode.nil?
+
+      hexcode = @hexcode.gsub('#', '')
+      percentage = percentage.to_f / 100
+      rgb = hexcode.scan(/../).map { |c| c.hex }
+      rgb.map! { |c| (c.to_i * percentage).round }
+
+      "#%02x%02x%02x" % rgb
+    end
+
+    # Lighten the color
+    # @param percentage [Integer]
+    def lighten(percentage)
+      fail 'Can not operate on a non-hexadecimal color' if @hexcode.nil?
+
+      hexcode = @hexcode.gsub('#', '')
+      percentage = percentage.to_f / 100
+      rgb = hexcode.scan(/../).map { |c| c.hex }
+      rgb.map! { |c| [(c.to_i + 255 * percentage).round, 255].min }
+
+      "#%02x%02x%02x" % rgb
+    end
+
+    # String representation
+    def to_s
+      @hexcode
+    end
   end
 
   # Entity base class

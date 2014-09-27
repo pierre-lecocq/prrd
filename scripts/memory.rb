@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: memory.rb
-# Time-stamp: <2014-09-27 10:31:00 pierre>
+# Time-stamp: <2014-09-27 12:00:56 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - memory
 
@@ -142,14 +142,14 @@ graph.add_definition definition
 
 area = PRRD::Graph::Area.new
 area.value = 'ram'
-area.color = PRRD.color(:blue)
+area.color = PRRD::Color.new :blue
 area.legend = 'RAM'
 
 graph.add_area area
 
 area = PRRD::Graph::Area.new
 area.value = 'swap'
-area.color = PRRD.color(:red)
+area.color = PRRD::Color.new :red
 area.legend = 'Swap'
 
 graph.add_area area

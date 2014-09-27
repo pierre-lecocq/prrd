@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-25 13:05:01 pierre>
+# Time-stamp: <2014-09-27 10:08:32 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -12,11 +12,19 @@ module PRRD
     attr_accessor :datasources, :archives
 
     # Constructor
-    def initialize
+    def initialize(values = nil)
       @datasources = []
       @archives = []
       @start = Time.now.to_i - 86_400
       @step = 300
+
+      unless values.nil?
+        values.each do |k, v|
+          m = "#{k}=".to_sym
+          next unless respond_to? m
+          send m, v
+        end
+      end
     end
 
     # Does database file exist?
@@ -51,6 +59,18 @@ module PRRD
     # @param archives [Array]
     def add_archives(archives)
       @archives = archives
+    end
+
+    # Add an object
+    # @param object [Object]
+    def <<(object)
+      if object.is_a? PRRD::Database::Datasource
+        add_datasource object
+      elsif object.is_a? PRRD::Database::Archive
+        add_archive object
+      else
+        fail 'Can not add this kind of object in PRRD::Database'
+      end
     end
 
     # Create a database

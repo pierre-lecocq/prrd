@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: process.rb
-# Time-stamp: <2014-09-25 13:32:03 pierre>
+# Time-stamp: <2014-09-27 10:44:40 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - process
 
@@ -35,25 +35,23 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new name: 'user', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource ds
+  dss = [
+    PRRD::Database::Datasource.new({name: 'user', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'sys', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'})
+  ]
 
-  ds = PRRD::Database::Datasource.new name: 'sys', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource ds
+  database.add_datasources dss
 
   # Set archives
 
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576
-  database.add_archive ar
+  ars = [
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732}),
+    PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460})
+  ]
 
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672
-  database.add_archive ar
-
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732
-  database.add_archive ar
-
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460
-  database.add_archive ar
+  database.add_archives ars
 
   # Create
 
@@ -87,26 +85,33 @@ graph.title = 'Processes'
 
 # Set colors
 
-graph.add_color PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
-graph.add_color PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
-graph.add_color PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
-graph.add_color PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
+cls = [
+  PRRD::Graph::Color.new({colortag: 'BACK', color: '#151515'}),
+  PRRD::Graph::Color.new({colortag: 'FONT', color: '#e5e5e5'}),
+  PRRD::Graph::Color.new({colortag: 'CANVAS', color: '#252525'}),
+  PRRD::Graph::Color.new({colortag: 'ARROW', color: '#ff0000'})
+
+]
+
+graph.add_colors cls
 
 # Set definitions
 
-d = PRRD::Graph::Definition.new vname: 'user', rrdfile: database.path, ds_name: 'user', cf: 'AVERAGE'
-graph.add_definition d
+dfs = [
+  PRRD::Graph::Definition.new({vname: 'user', rrdfile: database.path, ds_name: 'user', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'sys', rrdfile: database.path, ds_name: 'sys', cf: 'AVERAGE'})
+]
 
-d = PRRD::Graph::Definition.new vname: 'sys', rrdfile: database.path, ds_name: 'sys', cf: 'AVERAGE'
-graph.add_definition d
+graph.add_definitions dfs
 
-# Set lines
+# Set areas
 
-area = PRRD::Graph::Area.new value: 'user', color: PRRD.color(:blue), legend: 'User'
-graph.add_area area
+ars = [
+  PRRD::Graph::Area.new({value: 'user', color: PRRD.color(:blue), legend: 'User'}),
+  PRRD::Graph::Area.new({value: 'sys', color: PRRD.color(:red), legend: 'System'})
+]
 
-area = PRRD::Graph::Area.new value: 'sys', color: PRRD.color(:red), legend: 'System'
-graph.add_area area
+graph.add_areas ars
 
 # Create graph
 

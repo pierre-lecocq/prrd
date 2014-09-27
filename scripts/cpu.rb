@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: cpu.rb
-# Time-stamp: <2014-09-25 13:25:11 pierre>
+# Time-stamp: <2014-09-27 10:39:29 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - cpu
 
@@ -35,43 +35,53 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new
-  ds.name = 'cpu'
-  ds.type = 'GAUGE'
-  ds.heartbeat = 600
-  ds.min = 0
-  ds.max = 'U'
-  database.add_datasource ds
+  values = {
+    name: 'cpu',
+    type: 'GAUGE',
+    heartbeat: 600,
+    min: 0,
+    max: 'U'
+  }
+
+  database.add_datasource PRRD::Database::Datasource.new(values)
 
   # Set archives
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 1
-  ar.rows = 576
-  database.add_archive ar
+  values = {
+    cf: 'AVERAGE',
+    xff: 0.5,
+    steps: 1,
+    rows: 576
+  }
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 6
-  ar.rows = 672
-  database.add_archive ar
+  database.add_archive PRRD::Database::Archive.new(values)
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 24
-  ar.rows = 732
-  database.add_archive ar
+  values = {
+    cf: 'AVERAGE',
+    xff: 0.5,
+    steps: 6,
+    rows: 672
+  }
 
-  ar = PRRD::Database::Archive.new
-  ar.cf = 'AVERAGE'
-  ar.xff = 0.5
-  ar.steps = 144
-  ar.rows = 1460
-  database.add_archive ar
+  database.add_archive PRRD::Database::Archive.new(values)
+
+  values = {
+    cf: 'AVERAGE',
+    xff: 0.5,
+    steps: 24,
+    rows: 732
+  }
+
+  database.add_archive PRRD::Database::Archive.new(values)
+
+  values = {
+    cf: 'AVERAGE',
+    xff: 0.5,
+    steps: 144,
+    rows: 1460
+  }
+
+  database.add_archive PRRD::Database::Archive.new(values)
 
   # Create
 
@@ -91,31 +101,31 @@ graph.path = $prrd_image_root_path + '/cpu.png'
 graph.database = database
 graph.width = $prrd_graph_width
 graph.height = $prrd_graph_height
-
-# Set infos
-
-graph.title = 'CPU load'
-graph.vertical_label = '%'
+graph.title = 'CPU load (%)'
 graph.lower_limit = 0
 graph.upper_limit = 100
 
 # Set definitions
 
-definition = PRRD::Graph::Definition.new
-definition.vname = 'cpu'
-definition.rrdfile = database.path
-definition.ds_name = 'cpu'
-definition.cf = 'AVERAGE'
-graph.add_definition definition
+values = {
+  vname: 'cpu',
+  rrdfile: database.path,
+  ds_name: 'cpu',
+  cf: 'AVERAGE'
+}
+
+graph.add_definition PRRD::Graph::Definition.new(values)
 
 # Set lines
 
-line = PRRD::Graph::Line.new
-line.width = 1
-line.value = 'cpu'
-line.color = PRRD.color(:red)
-line.legend = 'cpu'
-graph.add_line line
+values = {
+  width: 1,
+  value: 'cpu',
+  color: PRRD.color(:red),
+  legend: 'cpu'
+}
+
+graph.add_line PRRD::Graph::Line.new(values)
 
 # Create graph
 

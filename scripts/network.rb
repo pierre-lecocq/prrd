@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: network.rb
-# Time-stamp: <2014-09-25 22:51:48 pierre>
+# Time-stamp: <2014-09-27 11:27:32 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Sample PRRD usage - network
 
@@ -36,25 +36,15 @@ unless database.exists?
 
   # Set datasources
 
-  ds = PRRD::Database::Datasource.new name: 'recv', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource ds
-
-  ds = PRRD::Database::Datasource.new name: 'send', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'
-  database.add_datasource ds
+  database << PRRD::Database::Datasource.new({name: 'recv', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'})
+  database << PRRD::Database::Datasource.new({name: 'send', type: 'COUNTER', heartbeat: 600, min: 0, max: 'U'})
 
   # Set archives
 
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576
-  database.add_archive ar
-
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672
-  database.add_archive ar
-
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732
-  database.add_archive ar
-
-  ar = PRRD::Database::Archive.new cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460
-  database.add_archive ar
+  database << PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 1, rows: 576})
+  database << PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 6, rows: 672})
+  database << PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 24, rows: 732})
+  database << PRRD::Database::Archive.new({cf: 'AVERAGE', xff: 0.5, steps: 144, rows: 1460})
 
   # Create
 
@@ -72,29 +62,25 @@ database.update Time.now.to_i, recv_value, send_value
 ############################################
 # Graph
 
-graph = PRRD::Graph.new
-graph.path = $prrd_image_root_path + '/network.png'
-graph.database = database
-graph.width = $prrd_graph_width
-graph.height = $prrd_graph_height
-graph.title = 'Network'
-graph.vertical_label = 'B'
+values = {
+  path: $prrd_image_root_path + '/network.png',
+  database: database,
+  width: $prrd_graph_width,
+  height: $prrd_graph_height,
+  title: 'Network'
+}
+
+graph = PRRD::Graph.new(values)
 
 # Set definitions
 
-d = PRRD::Graph::Definition.new vname: 'recv', rrdfile: database.path, ds_name: 'recv', cf: 'AVERAGE'
-graph.add_definition d
+graph << PRRD::Graph::Definition.new({vname: 'recv', rrdfile: database.path, ds_name: 'recv', cf: 'AVERAGE'})
+graph << PRRD::Graph::Definition.new({vname: 'send', rrdfile: database.path, ds_name: 'send', cf: 'AVERAGE'})
 
-d = PRRD::Graph::Definition.new vname: 'send', rrdfile: database.path, ds_name: 'send', cf: 'AVERAGE'
-graph.add_definition d
+# Set areas
 
-# Set lines
-
-area = PRRD::Graph::Area.new value: 'recv', color: PRRD.color(:blue), legend: 'Reveived'
-graph.add_area area
-
-area = PRRD::Graph::Area.new value: 'send', color: PRRD.color(:red), legend: 'Send'
-graph.add_area area
+graph << PRRD::Graph::Area.new({value: 'recv', color: PRRD.color(:blue), legend: 'Reveived'})
+graph << PRRD::Graph::Area.new({value: 'send', color: PRRD.color(:red), legend: 'Sent'})
 
 # Create graph
 

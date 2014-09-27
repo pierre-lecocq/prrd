@@ -141,6 +141,8 @@ For each element of a database or a graph, there are alternative syntaxes to cre
 
 Let's take an exemple with Datasources, but it is the same for Archives, Colors, Lines, Areas, ... and so on.
 
+(Note: each example in the `scripts` folder use a different syntax as a showcase of all different ways to write PRRD scripts)
+
 ### Object properties
 
 ```
@@ -180,6 +182,15 @@ dss = [
 ]
 
 database.add_datasources dss
+```
+
+### Add objects
+
+This syntax auto-detect the type and add it properly to the database or graph object
+
+```
+database << PRRD::Database::Datasource.new({name: = 'ds1', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'})
+graph << PRRD::Graph::Line.new({width: 2, value: = 'ds1', color: PRRD.color(:blue), legend: 'DS1'})
 ```
 
 ## Sample scripts

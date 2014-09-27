@@ -1,7 +1,4 @@
-*.rrd
-*.png
-scripts/*.rrd
-scripts/*.png
+TODO.org
 scripts/config.rb
 Gemfile.lock
 .yardoc

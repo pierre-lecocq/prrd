@@ -1,5 +1,5 @@
 # File: graph.rb
-# Time-stamp: <2014-09-25 13:04:56 pierre>
+# Time-stamp: <2014-09-27 10:08:29 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -23,12 +23,20 @@ module PRRD
     attr_accessor :prints
 
     # Constructor
-    def initialize
+    def initialize(values = nil)
       @colors = []
       @definitions = []
       @areas = []
       @lines = []
       @prints = []
+
+      unless values.nil?
+        values.each do |k, v|
+          m = "#{k}=".to_sym
+          next unless respond_to? m
+          send m, v
+        end
+      end
     end
 
     # Check image existence
@@ -99,6 +107,22 @@ module PRRD
     # @param prints [Array]
     def add_prints(prs)
       @prints = prs
+    end
+
+    # Add an object
+    # @param object [Object]
+    def <<(object)
+      if object.is_a? PRRD::Graph::Definition
+        add_definition object
+      elsif object.is_a? PRRD::Graph::Area
+        add_area object
+      elsif object.is_a? PRRD::Graph::Line
+        add_line object
+      elsif object.is_a? PRRD::Graph::Print
+        add_print object
+      else
+        fail 'Can not add this kind of object in PRRD::Graph'
+      end
     end
 
     # Generate a graph

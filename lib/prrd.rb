@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-25 23:51:45 pierre>
+# Time-stamp: <2014-09-27 10:04:32 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: hrule.rb
-# Time-stamp: <2014-09-27 13:23:47 pierre>
+# Time-stamp: <2014-09-29 23:59:13 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Hrul class for PRRD
 
@@ -25,6 +25,8 @@ module PRRD
       # Transform to a HRULE formatted string
       def to_s
         fail 'Empty hrule object' if @data.empty?
+
+        validate_presence :value, :color
 
         chunks = []
 

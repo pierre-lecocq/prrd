@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: showcase.rb
-# Time-stamp: <2014-09-29 23:42:32 pierre>
+# Time-stamp: <2014-09-29 23:57:46 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Showcase
 

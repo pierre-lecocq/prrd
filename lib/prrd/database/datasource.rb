@@ -1,5 +1,5 @@
 # File: datasource.rb
-# Time-stamp: <2014-09-24 10:42:42 pierre>
+# Time-stamp: <2014-09-30 00:04:37 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Datasource class for PRRD
 
@@ -23,6 +23,8 @@ module PRRD
       # Transform to a DS formatted string
       def to_s
         fail 'Empty datasource object' if @data.empty?
+
+        validate_presence :name, :type, :heartbeat, :min, :max
 
         chunks = ['DS']
 

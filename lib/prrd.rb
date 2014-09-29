@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-29 23:47:50 pierre>
+# Time-stamp: <2014-09-30 00:05:36 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -129,6 +129,14 @@ module PRRD
           next unless @keys.include? k
           send "#{k}=".to_sym, v
         end
+      end
+    end
+
+    # Validate presence of keys in data collection
+    # @param keys [Array]
+    def validate_presence(*keys)
+      keys.each do |k|
+        fail 'Define a "%s" option' % k if !@data.key?(k) || @data[k].nil?
       end
     end
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: line.rb
-# Time-stamp: <2014-09-27 13:04:51 pierre>
+# Time-stamp: <2014-09-29 23:59:53 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Line class for PRRD
 
@@ -25,6 +25,10 @@ module PRRD
       # Transform to a LINE formatted string
       def to_s
         fail 'Empty line object' if @data.empty?
+
+        @data[:width] ||= 1
+
+        validate_presence :value
 
         chunks = []
 

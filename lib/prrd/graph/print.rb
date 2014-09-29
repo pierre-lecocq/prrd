@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: print.rb
-# Time-stamp: <2014-09-29 23:37:11 pierre>
+# Time-stamp: <2014-09-29 23:58:06 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Print class for PRRD
 
@@ -15,7 +15,8 @@ module PRRD
           :gprint,
           :vname,
           :cf,
-          :format
+          :format,
+          :strftime
         ]
 
         super values
@@ -24,6 +25,8 @@ module PRRD
       # Transform to a PRINT formatted string
       def to_s
         fail 'Empty print object' if @data.empty?
+
+        validate_presence :vname, :cf, :format
 
         @data[:grpint] ||= false
 
@@ -38,6 +41,7 @@ module PRRD
         chunks << "#{@data[:vname]}"
         chunks << "#{@data[:cf]}"
         chunks << "#{@data[:format]}"
+        chunks << "#{@data[:strftime]}" if @data.key?(:strftime)
 
         chunks.join ':'
       end

@@ -1,5 +1,5 @@
 # File: area.rb
-# Time-stamp: <2014-09-25 23:53:55 pierre>
+# Time-stamp: <2014-09-30 00:00:08 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Area class for PRRD
 
@@ -22,6 +22,8 @@ module PRRD
       # Transform to a AREA formatted string
       def to_s
         fail 'Empty area object' if @data.empty?
+
+        validate_presence :value
 
         chunks = []
 

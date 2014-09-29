@@ -1,5 +1,5 @@
 # File: archive.rb
-# Time-stamp: <2014-09-24 10:42:25 pierre>
+# Time-stamp: <2014-09-30 00:04:06 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Archive class for PRRD
 
@@ -22,6 +22,8 @@ module PRRD
       # Transform to a RRA formatted string
       def to_s
         fail 'Empty archive object' if @data.empty?
+
+        validate_presence :cf, :xff, :steps, :rows
 
         chunks = ['RRA']
 

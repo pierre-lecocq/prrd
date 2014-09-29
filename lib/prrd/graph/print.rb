@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: print.rb
-# Time-stamp: <2014-09-29 23:20:54 pierre>
+# Time-stamp: <2014-09-29 23:37:11 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Print class for PRRD
 
@@ -24,6 +24,8 @@ module PRRD
       # Transform to a PRINT formatted string
       def to_s
         fail 'Empty print object' if @data.empty?
+
+        @data[:grpint] ||= false
 
         chunks = []
 

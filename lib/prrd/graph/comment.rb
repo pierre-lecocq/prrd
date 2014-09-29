@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: comment.rb
-# Time-stamp: <2014-09-29 23:20:31 pierre>
+# Time-stamp: <2014-09-29 23:44:04 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Comment class for PRRD
 

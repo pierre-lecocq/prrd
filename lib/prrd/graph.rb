@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # File: graph.rb
-# Time-stamp: <2014-09-29 23:13:47 pierre>
+# Time-stamp: <2014-09-29 23:47:42 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -28,7 +28,9 @@ module PRRD
         prints: [],
         comments: [],
         hrules: [],
-        vrules: []
+        vrules: [],
+        shift: [],
+        textalign: []
       }
 
       unless values.nil?
@@ -85,6 +87,10 @@ module PRRD
         @entities[:hrules] << object
       elsif object.is_a? PRRD::Graph::Vrule
         @entities[:vrules] << object
+      elsif object.is_a? PRRD::Graph::Shift
+        @entities[:shift] << object
+      elsif object.is_a? PRRD::Graph::Textalign
+        @entities[:textalign] << object
       else
         fail 'Can not add this kind of object in PRRD::Graph'
       end

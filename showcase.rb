@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: showcase.rb
-# Time-stamp: <2014-09-29 23:57:46 pierre>
+# Time-stamp: <2014-09-30 00:15:35 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Showcase
 
@@ -62,10 +62,12 @@ end
 graph = PRRD::Graph.new({path: imgpath, database: database, width: 1024, height: 768, title: 'Showcase'})
 
 graph.add_colors [
-  PRRD::Graph::Color.new({colortag: 'BACK', color: '#151515'}),
-  PRRD::Graph::Color.new({colortag: 'FONT', color: '#e5e5e5'}),
+  PRRD::Graph::Color.new({colortag: 'BACK', color: '#222222'}),
+  PRRD::Graph::Color.new({colortag: 'FONT', color: '#777777'}),
   PRRD::Graph::Color.new({colortag: 'CANVAS', color: '#222222'}),
-  PRRD::Graph::Color.new({colortag: 'ARROW', color: '#00ff00'})
+  PRRD::Graph::Color.new({colortag: 'ARROW', color: '#00ff00'}),
+  PRRD::Graph::Color.new({colortag: 'GRID', color: '#444444'}),
+  PRRD::Graph::Color.new({colortag: 'MGRID', color: '#333333'}),
 ]
 
 graph.add_definitions [

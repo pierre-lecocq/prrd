@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 # File: graph.rb
-# Time-stamp: <2014-09-27 15:25:23 pierre>
+# Time-stamp: <2014-09-29 23:13:47 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -15,23 +16,20 @@ module PRRD
     attr_accessor :lower_limit, :upper_limit, :rigid
     attr_accessor :no_legend, :legend_position, :legend_direction
     attr_accessor :base, :border, :zoom, :imgformat, :watermark
-
-    attr_accessor :colors
-    attr_accessor :definitions
-    attr_accessor :areas
-    attr_accessor :lines
-    attr_accessor :prints
-    attr_accessor :hrules, :vrules
+    attr_accessor :entities
 
     # Constructor
     def initialize(values = nil)
-      @colors = []
-      @definitions = []
-      @areas = []
-      @lines = []
-      @prints = []
-      @hrules = []
-      @vrules = []
+      @entities = {
+        colors: [],
+        definitions: [],
+        areas: [],
+        lines: [],
+        prints: [],
+        comments: [],
+        hrules: [],
+        vrules: []
+      }
 
       unless values.nil?
         values.each do |k, v|
@@ -52,107 +50,41 @@ module PRRD
       fail 'No database provided' if @database.nil?
     end
 
-    # Add a color object
-    # @param color [PRRD::Graph::Color]
-    def add_color(color)
-      @colors << color
-    end
+    def method_missing(m, *args, &block)
+      entities = @entities.keys.map(&:to_s) + @entities.keys.map! { |e| e.to_s[0..-2] }
+      ms = m.to_s.gsub 'add_', ''
+      if entities.include? ms
+        if ms[-1] == 's'
+          @entities[ms.to_sym] = args[0]
+        else
+          @entities["#{ms}s".to_sym] << args[0]
+        end
 
-    # Add color objects
-    # @param colors [Array]
-    def add_colors(colors)
-      @colors = colors
-    end
+        return true
+      end
 
-    # Add a definition object
-    # @param definition [PRRD::Graph::Definition]
-    def add_definition(definition)
-      @definitions << definition
-    end
-
-    # Add definition objects
-    # @param definitions [Array]
-    def add_definitions(definitions)
-      @definitions = definitions
-    end
-
-    # Add an area object
-    # @param area [PRRD::Graph::Area]
-    def add_area(area)
-      @areas << area
-    end
-
-    # Add area objects
-    # @param areas [Array]
-    def add_areas(areas)
-      @areas = areas
-    end
-
-    # Add a line object
-    # @param line [PRRD::Graph::Line]
-    def add_line(line)
-      @lines << line
-    end
-
-    # Add line objects
-    # @param lines [Array]
-    def add_lines(lines)
-      @lines = lines
-    end
-
-    # Add a print object
-    # @param pr [PRRD::Graph::Print]
-    def add_print(pr)
-      @prints << pr
-    end
-
-    # Add print objects
-    # @param prints [Array]
-    def add_prints(prs)
-      @prints = prs
-    end
-
-    # Add a hrule object
-    # @param pr [PRRD::Graph::Hrule]
-    def add_hrule(pr)
-      @hrules << pr
-    end
-
-    # Add hrule objects
-    # @param hrules [Array]
-    def add_hrules(prs)
-      @hrules = prs
-    end
-
-    # Add a vrule object
-    # @param pr [PRRD::Graph::Vrule]
-    def add_vrule(pr)
-      @vrules << pr
-    end
-
-    # Add vrule objects
-    # @param vrules [Array]
-    def add_vrules(prs)
-      @vrules = prs
+      super
     end
 
     # Add an object
     # @param object [Object]
     def <<(object)
       if object.is_a? PRRD::Graph::Definition
-        add_definition object
+        @entities[:definitions] << object
       elsif object.is_a? PRRD::Graph::Color
-        add_color object
+        @entities[:colors] << object
       elsif object.is_a? PRRD::Graph::Area
-        add_area object
+        @entities[:areas] << object
       elsif object.is_a? PRRD::Graph::Line
-        add_line object
+        @entities[:lines] << object
       elsif object.is_a? PRRD::Graph::Print
-        add_print object
+        @entities[:prints] << object
+      elsif object.is_a? PRRD::Graph::Comment
+        @entities[:comments] << object
       elsif object.is_a? PRRD::Graph::Hrule
-        add_hrule object
+        @entities[:hrules] << object
       elsif object.is_a? PRRD::Graph::Vrule
-        add_vrule object
+        @entities[:vrules] << object
       else
         fail 'Can not add this kind of object in PRRD::Graph'
       end
@@ -164,7 +96,7 @@ module PRRD
       check_file
       check_database
 
-      fail 'Definitions are missing' if @definitions.empty?
+      fail 'Definitions are missing' if @entities[:definitions].empty?
 
       cmd = []
       cmd << "#{PRRD.bin} graph #{@path}"
@@ -191,13 +123,12 @@ module PRRD
       cmd << "--imgformat=\"#{@imgformat}\"" unless @imgformat.nil?
       cmd << "--watermark=\"#{@watermark}\"" unless @watermark.nil?
 
-      @colors.map { |e| cmd << e.to_s }
-      @definitions.map { |e| cmd << e.to_s }
-      @areas.map { |e| cmd << e.to_s }
-      @lines.map { |e| cmd << e.to_s }
-      @prints.map { |e| cmd << e.to_s }
-      @hrules.map { |e| cmd << e.to_s }
-      @vrules.map { |e| cmd << e.to_s }
+      @entities.each do |k, v|
+        next if v.empty?
+        v.each do |e|
+          cmd << e.to_s
+        end
+      end
 
       # Exectute
       cmd = cmd.join ' '

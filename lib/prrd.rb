@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-27 13:24:44 pierre>
+# Time-stamp: <2014-09-29 23:14:06 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -163,5 +163,6 @@ require 'prrd/graph/colors'
 require 'prrd/graph/area'
 require 'prrd/graph/line'
 require 'prrd/graph/print'
+require 'prrd/graph/comment'
 require 'prrd/graph/hrule'
 require 'prrd/graph/vrule'

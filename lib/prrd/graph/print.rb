@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: print.rb
-# Time-stamp: <2014-09-24 10:41:27 pierre>
+# Time-stamp: <2014-09-29 23:20:54 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Print class for PRRD
 
@@ -11,7 +11,6 @@ module PRRD
     class Print < PRRD::Entity
       # Constructor
       def initialize(values = nil)
-        super
         @keys = [
           :gprint,
           :vname,

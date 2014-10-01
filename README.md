@@ -115,7 +115,7 @@ graph.vertical_align = 'My vertical label'
 # Optionally set colors
 
 graph.add_color PRRD::Graph::Color.new colortag: 'BACK', color: '#151515'
-graph.add_colorPRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
+graph.add_color PRRD::Graph::Color.new colortag: 'FONT', color: '#e5e5e5'
 graph.add_color PRRD::Graph::Color.new colortag: 'CANVAS', color: '#252525'
 graph.add_color PRRD::Graph::Color.new colortag: 'ARROW', color: '#ff0000'
 
@@ -217,7 +217,7 @@ If you want to run them permanently, add these lines to your crontab (adpat *pat
 
 ```
 */5 *   * * *   username ruby /home/username/prrd/scripts/memory.rb > /dev/null
-*/5 *   * * *   usernaùe ruby /home/username/prrd/scripts/cpu.rb > /dev/null
-*/5 *   * * *   usernaùe ruby /home/username/prrd/scripts/process.rb > /dev/null
-*/5 *   * * *   usernaùe ruby /home/username/prrd/scripts/network.rb > /dev/null
+*/5 *   * * *   username ruby /home/username/prrd/scripts/cpu.rb > /dev/null
+*/5 *   * * *   username ruby /home/username/prrd/scripts/process.rb > /dev/null
+*/5 *   * * *   username ruby /home/username/prrd/scripts/network.rb > /dev/null
 ```

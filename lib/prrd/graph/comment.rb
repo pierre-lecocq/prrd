@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: comment.rb
-# Time-stamp: <2014-09-29 23:58:19 pierre>
+# Time-stamp: <2014-10-01 20:32:12 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Comment class for PRRD
 
@@ -24,7 +22,7 @@ module PRRD
 
         validate_presence :text
 
-        "COMMENT:\"#{@data[:text]}\""
+        "COMMENT:\"%s\"" % @data[:text]
       end
     end
   end

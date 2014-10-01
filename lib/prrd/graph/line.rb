@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: line.rb
-# Time-stamp: <2014-09-29 23:59:53 pierre>
+# Time-stamp: <2014-10-01 21:16:41 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Line class for PRRD
 
@@ -36,13 +34,13 @@ module PRRD
           next unless @data.key?(k)
           case k
           when :value
-            chunks << "LINE#{@data[:width]}:#{@data[k]}#{@data[:color]}"
-          when :legend
-            chunks << "\"#{@data[k]}\""
-          when :stack
-            chunks << "STACK"
+            chunks << "LINE%s:%s%s" % [@data[:width], @data[k], @data[:color]]
           when :width, :color
             # nope
+          when :legend
+            chunks << "\"%s\"" % @data[k]
+          when :stack
+            chunks << "STACK"
           else
             chunks << @data[k]
           end

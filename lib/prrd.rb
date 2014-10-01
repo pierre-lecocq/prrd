@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # File: prrd.rb
-# Time-stamp: <2014-09-30 00:05:36 pierre>
+# Time-stamp: <2014-10-01 21:25:26 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: RRD ruby module
 
@@ -36,6 +36,17 @@ module PRRD
     end
 
     @@bin
+  end
+
+  # Execute a command
+  # @param cmd [String]
+  # @param message [String, Nil]
+  # @return [String, Nil]
+  def self.execute(cmd, message = nil)
+    puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
+    `#{cmd}`
+
+    message if $CHILD_STATUS.nil? && !message.nil?
   end
 
   # Color class

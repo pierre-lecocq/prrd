@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2014-09-27 10:08:32 pierre>
+# Time-stamp: <2014-10-01 21:26:05 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Database class for PRRD
 
@@ -89,11 +89,7 @@ module PRRD
       @archives.map { |e| cmd << e.to_s }
 
       # Execute
-      cmd = cmd.join ' '
-      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
-      `#{cmd}`
-
-      'Database created successfully' if $CHILD_STATUS.nil?
+      PRRD.execute cmd.join ' '
     end
 
     # Update a database
@@ -104,12 +100,8 @@ module PRRD
       check_file
       timestamp ||= Time.now.to_i
 
-      cmd = "#{PRRD.bin} update #{@path} #{timestamp}:#{values.join ':'}"
-
       # Execute
-      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
-      `#{cmd}`
-      'Database updated successfully' if $CHILD_STATUS.nil?
+      PRRD.execute "#{PRRD.bin} update #{@path} #{timestamp}:#{values.join ':'}"
     end
   end
 end

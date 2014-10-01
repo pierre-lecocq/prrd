@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: vrule.rb
-# Time-stamp: <2014-09-29 23:58:58 pierre>
+# Time-stamp: <2014-10-01 21:19:19 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Hrul class for PRRD
 
@@ -34,13 +32,13 @@ module PRRD
           next unless @data.key?(k)
           case k
           when :time
-            chunks << "VRULE:#{@data[k]}#{@data[:color]}"
-          when :dashes
-            chunks << "dashes=\"#{@data[k]}\""
-          when :dashes_offset
-            chunks << "dashes-offset=\"#{@data[k]}\""
+            chunks << "VRULE:%s%s" % [@data[k], @data[:color]]
           when :color
             # nope
+          when :dashes
+            chunks << "dashes=\"%s\"" % @data[k]
+          when :dashes_offset
+            chunks << "dashes-offset=\"%s\"" % @data[k]
           else
             chunks << @data[k]
           end

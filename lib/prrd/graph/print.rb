@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: print.rb
-# Time-stamp: <2014-09-29 23:58:06 pierre>
+# Time-stamp: <2014-10-01 21:17:17 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Print class for PRRD
 
@@ -38,10 +36,10 @@ module PRRD
           chunks << 'PRINT'
         end
 
-        chunks << "#{@data[:vname]}"
-        chunks << "#{@data[:cf]}"
-        chunks << "#{@data[:format]}"
-        chunks << "#{@data[:strftime]}" if @data.key?(:strftime)
+        chunks << @data[:vname]
+        chunks << @data[:cf]
+        chunks << @data[:format]
+        chunks << @data[:strftime] if @data.key?(:strftime)
 
         chunks.join ':'
       end

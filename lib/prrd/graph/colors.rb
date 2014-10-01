@@ -1,5 +1,5 @@
 # File: color.rb
-# Time-stamp: <2014-09-24 21:38:41 pierre>
+# Time-stamp: <2014-10-01 20:31:49 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Color class for PRRD
 
@@ -21,7 +21,7 @@ module PRRD
       def to_s
         fail 'Empty color object' if @data.empty?
 
-        "--color " + @data[:colortag] + @data[:color]
+        "--color %s%s " % [@data[:colortag], @data[:color]]
       end
     end
   end

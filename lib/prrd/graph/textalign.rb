@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: textalign.rb
-# Time-stamp: <2014-09-30 00:02:05 pierre>
+# Time-stamp: <2014-10-01 21:18:12 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Textalign class for PRRD
 
@@ -27,7 +25,7 @@ module PRRD
           fail 'Orientation option muts be: left|right|justified|center'
         end
 
-        "TEXTALIGN:\"#{@data[:orientation]}\""
+        "TEXTALIGN:\"%s\"" % @data[:orientation]
       end
     end
   end

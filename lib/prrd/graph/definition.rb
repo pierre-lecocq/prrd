@@ -1,5 +1,5 @@
 # File: definition.rb
-# Time-stamp: <2014-09-24 10:41:45 pierre>
+# Time-stamp: <2014-10-01 21:14:18 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Definition class for PRRD
 
@@ -32,7 +32,7 @@ module PRRD
           next unless @data.key?(k)
           case k
           when :vname
-            chunks << "DEF:#{@data[k]}=#{@data[:rrdfile]}"
+            chunks << "DEF:%s=%s" % [@data[k], @data[:rrdfile]]
           when :rrdfile
             # nope
           else

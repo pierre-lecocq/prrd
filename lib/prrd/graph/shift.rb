@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 # File: shift.rb
-# Time-stamp: <2014-09-30 00:00:35 pierre>
+# Time-stamp: <2014-10-01 21:17:51 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Shift class for PRRD
 
@@ -25,7 +23,7 @@ module PRRD
 
         validate_presence :vname, :offset
 
-        "SHIFT:#{@data[:vname]}:#{@data[:offset]}"
+        "SHIFT:%s:%s" % [@data[:vname], @data[:offset]]
       end
     end
   end

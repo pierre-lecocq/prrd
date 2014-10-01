@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 # File: graph.rb
-# Time-stamp: <2014-09-29 23:47:42 pierre>
+# Time-stamp: <2014-10-01 21:26:29 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Graph class for PRRD
 
@@ -105,6 +104,7 @@ module PRRD
       fail 'Definitions are missing' if @entities[:definitions].empty?
 
       cmd = []
+
       cmd << "#{PRRD.bin} graph #{@path}"
 
       cmd << "--start=#{@start}" unless @start.nil?
@@ -137,10 +137,7 @@ module PRRD
       end
 
       # Exectute
-      cmd = cmd.join ' '
-      puts cmd.gsub(' ', "\n\t") if PRRD.debug_mode
-      `#{cmd}`
-      'Graph created successfully' if $CHILD_STATUS.nil?
+      PRRD.execute cmd.join ' '
     end
   end
 end

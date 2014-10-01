@@ -1,5 +1,5 @@
 # File: area.rb
-# Time-stamp: <2014-09-30 00:00:08 pierre>
+# Time-stamp: <2014-10-01 20:31:25 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Area class for PRRD
 
@@ -31,9 +31,9 @@ module PRRD
           next unless @data.key?(k)
           case k
           when :value
-            chunks << "AREA:#{@data[k]}#{@data[:color]}"
+            chunks << "AREA:%s%s" % [@data[k], @data[:color]]
           when :legend
-            chunks << "\"#{@data[k]}\""
+            chunks << "\"%s\"" % @data[k]
           when :stack
             chunks << "STACK"
           when :color

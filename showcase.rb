@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
 # File: showcase.rb
-# Time-stamp: <2014-09-30 00:15:35 pierre>
+# Time-stamp: <2014-10-01 21:20:09 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Showcase
 
 require_relative 'lib/prrd'
 
-create = false
+create = true
 
-# PRRD.activate_debug_mode
+PRRD.activate_debug_mode
 
 dbpath = '/home/pierre/rrd/showcase.rrd'
 imgpath = '/home/pierre/rrd/showcase.png'

@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 # File: showcase.rb
-# Time-stamp: <2014-10-01 21:20:09 pierre>
+# Time-stamp: <2014-10-01 22:42:11 pierre>
 # Copyright (C) 2014 Pierre Lecocq
 # Description: Showcase
 
 require_relative 'lib/prrd'
 
-create = true
+create = false
 
 PRRD.activate_debug_mode
 
@@ -31,7 +31,8 @@ if create
 
   database.add_datasources [
     PRRD::Database::Datasource.new({name: 'ds1', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
-    PRRD::Database::Datasource.new({name: 'ds2', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'})
+    PRRD::Database::Datasource.new({name: 'ds2', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'}),
+    PRRD::Database::Datasource.new({name: 'ds3', type: 'GAUGE', heartbeat: 600, min: 0, max: 'U'})
   ]
 
   database.add_archives [
@@ -48,10 +49,12 @@ if create
   now_ts = Time.now.to_i
   update_ts = start_ts + 1
   while update_ts < now_ts
-    value1 = 90 + Random.rand(20)
-    value2 = 90 + Random.rand(5)
+    value1 = Random.rand(200)
+    value2 = Random.rand(80)
+    value3 = Random.rand(150)
 
-    database.update update_ts, value1, value2
+    database.update update_ts, value1, value2, value3
+
     update_ts += 1
   end
 
@@ -59,7 +62,7 @@ end
 
 # Graph :: init
 
-graph = PRRD::Graph.new({path: imgpath, database: database, width: 1024, height: 768, title: 'Showcase'})
+graph = PRRD::Graph.new({path: imgpath, database: database, width: 1024, height: 768, title: 'Showcase', lower_limit: 0, upper_limit: 200})
 
 graph.add_colors [
   PRRD::Graph::Color.new({colortag: 'BACK', color: '#222222'}),
@@ -72,7 +75,8 @@ graph.add_colors [
 
 graph.add_definitions [
   PRRD::Graph::Definition.new({vname: 'ds1', rrdfile: database.path, ds_name: 'ds1', cf: 'AVERAGE'}),
-  PRRD::Graph::Definition.new({vname: 'ds2', rrdfile: database.path, ds_name: 'ds2', cf: 'AVERAGE'})
+  PRRD::Graph::Definition.new({vname: 'ds2', rrdfile: database.path, ds_name: 'ds2', cf: 'AVERAGE'}),
+  PRRD::Graph::Definition.new({vname: 'ds3', rrdfile: database.path, ds_name: 'ds3', cf: 'AVERAGE'})
 ]
 
 graph.add_comment PRRD::Graph::Comment.new({text: "This is a comment"})
@@ -81,7 +85,8 @@ graph.add_print PRRD::Graph::Print.new({gprint: true, vname: 'ds1', cf: 'AVERAGE
 graph.add_print PRRD::Graph::Print.new({gprint: true, vname: 'ds2', cf: 'AVERAGE', format: "%3.3le"})
 
 color1 = PRRD::Color.new(:blue)
-color2 = PRRD::Color.new(:red)
+color2 = PRRD::Color.new(:blue, :dark)
+color3 = PRRD::Color.new(:red)
 
 graph.add_areas [
   PRRD::Graph::Area.new({value: 'ds1', color: color1, legend: 'Ds1'}),
@@ -90,7 +95,8 @@ graph.add_areas [
 
 graph.add_lines [
   PRRD::Graph::Line.new({width: 1, value: 'ds1', color: color1.lighten(50), legend: 'Ds1'}),
-  PRRD::Graph::Line.new({width: 1, value: 'ds2', color: color2.lighten(50), legend: 'Ds2'})
+  PRRD::Graph::Line.new({width: 1, value: 'ds2', color: color2.lighten(50), legend: 'Ds2'}),
+  PRRD::Graph::Line.new({width: 2, value: 'ds3', color: color3, legend: 'Ds3'})
 ]
 
 # Graph :: Generate

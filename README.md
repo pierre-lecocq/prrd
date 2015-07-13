@@ -10,7 +10,13 @@ Hold on please, work in progress ...
 
 During the development process, there is no gem available. It will be packaged when the first stable release is reached.
 
-To install PRRD, install dependencies and clone this repository:
+To install PRRD, you can simply install the gem
+
+```
+sudo gem install prrd
+```
+
+*OR*, to install PRRD the traditional way, install dependencies and clone this repository:
 
 ```
 sudo gem install bundler

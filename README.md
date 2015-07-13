@@ -8,8 +8,6 @@ Hold on please, work in progress ...
 
 ## Install
 
-During the development process, there is no gem available. It will be packaged when the first stable release is reached.
-
 To install PRRD, you can simply install the gem
 
 ```

@@ -1,10 +1,6 @@
 # PRRD
 
-A (simple) rrdtool ruby interface
-
-## Disclaimer
-
-Hold on please, work in progress ...
+A rrdtool ruby interface
 
 ## Install
 
